@@ -1,0 +1,83 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Katsina Local Government - Home of Innovation</title>
+
+    <!-- Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Katsina Local Government - Leading Nigeria's digital transformation in local governance through innovation, transparency, and citizen-centric services.">
+    <meta name="keywords" content="Katsina, Local Government, Nigeria, Digital Government, Innovation, Services, Opportunities">
+    <meta name="author" content="Katsina Local Government">
+
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Katsina Local Government - Home of Innovation">
+    <meta property="og:description" content="Experience the future of government services with our citizen-centric digital solutions">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/logo.png">
+
+    <!-- Prevent FOUC (Flash of Unstyled Content) -->
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f9fafb;
+        }
+        #root {
+            min-height: 100vh;
+        }
+        /* Loading spinner for initial load */
+        .initial-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #087443 0%, #0fa968 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 9999;
+        }
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div id="root">
+    <!-- Initial loading screen -->
+    <div class="initial-loader">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+            <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                <span style="font-weight: bold; font-size: 24px;">KLG</span>
+            </div>
+            <div>
+                <h1 style="margin: 0; font-size: 28px; font-weight: bold;">Katsina Local Government</h1>
+                <p style="margin: 0; opacity: 0.9;">Home of Innovation & Prosperity</p>
+            </div>
+        </div>
+        <div class="loader-spinner"></div>
+        <p style="margin-top: 16px; opacity: 0.8;">Loading your digital government experience...</p>
+    </div>
+</div>
+<script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
