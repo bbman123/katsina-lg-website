@@ -1,0 +1,37 @@
+
+{
+  "name": "katsina-lg-backend",
+  "version": "1.0.0",
+  "description": "Katsina Local Government Backend API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "create-admin": "node scripts/createAdmin.js",
+    "delete-admin": "node scripts/deleteAdmin.js",
+    "setup-local-db": "node scripts/setupLocalDB.js",
+    "test-connection": "node scripts/testConnection.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["government", "local-government", "nigeria", "api"],
+  "author": "Katsina LG Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.4",
+    "cloudinary": "^1.40.0",
+    "express-fileupload": "^1.4.0",
+    "socket.io": "^4.7.2",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
