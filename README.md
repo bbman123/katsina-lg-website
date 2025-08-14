@@ -46,5 +46,5 @@
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/katsina-lg-website.git
+git clone https://github.com/ennmahmud/katsina-lg-website.git
 cd katsina-lg-website
