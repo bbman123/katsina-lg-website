@@ -1,1570 +1,264 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import {
-    Menu, X, Home, Users, FileText, Phone, Mail, MapPin, Calendar,
-    ArrowRight, ChevronRight, Star, Award, Target, Heart, Globe,
-    Building, Briefcase, DollarSign, Clock, Eye,
-    Facebook, Twitter, Instagram, Youtube, Download,
-    Play, AlertCircle, RefreshCw, Wifi, WifiOff
-} from 'lucide-react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { DataProvider } from './contexts/DataContext';
+import ProtectedRoute from './components/admin/ProtectedRoute';
 
-// Color Palette
-const colors = {
-    primary: {
-        50: '#f0fdf4',
-        100: '#dcfce7',
-        200: '#bbf7d0',
-        300: '#86efac',
-        400: '#4ade80',
-        500: '#22c55e',
-        600: '#087443',
-        700: '#15803d',
-        800: '#166534',
-        900: '#14532d'
-    },
-    secondary: {
-        50: '#fefce8',
-        100: '#fef3c7',
-        200: '#fde68a',
-        300: '#fcd34d',
-        400: '#fbbf24',
-        500: '#f59e0b',
-        600: '#d97706',
-        700: '#b45309',
-        800: '#92400e',
-        900: '#78350f'
-    }
-};
+// Beautiful Website Components
+import BeautifulWebsite from './components/BeautifulWebsite';
+import BeautifulHomePage from './pages/BeautifulHomePage';
+import BeautifulMediaPage from './pages/BeautifulMediaPage';
 
-// Custom Hooks
-const useIntersectionObserver = (delay = 0) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [elementRef, setElementRef] = useState(null);
+// Admin Components
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 
-    useEffect(() => {
-        if (!elementRef) return;
+// Beautiful About Page
+const BeautifulAboutPage = () => (
+    <div className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-16">
+                <h1 className="text-5xl font-bold text-gray-800 mb-6">About Katsina Local Government</h1>
+                <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+                    Leading Nigeria's digital transformation in local governance through innovation, transparency, and citizen-centric services.
+                </p>
+            </div>
 
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => setIsVisible(true), delay);
-                }
-            },
-            { threshold: 0.1, rootMargin: '50px' }
-        );
+            <div className="grid lg:grid-cols-2 gap-12 mb-20">
+                <div className="bg-gradient-to-br from-green-600 to-blue-600 rounded-3xl p-8 text-white">
+                    <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
+                    <p className="text-xl leading-relaxed opacity-90">
+                        To be Africa's most innovative and digitally advanced local government, creating a model of excellence in governance, citizen engagement, and sustainable development that inspires transformation across Nigeria.
+                    </p>
+                </div>
 
-        observer.observe(elementRef);
-        return () => observer.disconnect();
-    }, [elementRef, delay]);
+                <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl p-8 text-white">
+                    <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
+                    <p className="text-xl leading-relaxed opacity-90">
+                        To serve our diverse community with integrity, innovation, and excellence by providing world-class digital services, creating economic opportunities, and building sustainable infrastructure.
+                    </p>
+                </div>
+            </div>
 
-    return [setElementRef, isVisible];
-};
+            {/* Values */}
+            <div className="text-center mb-12">
+                <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Core Values</h2>
+            </div>
 
-const useCountUp = (end, duration = 2000) => {
-    const [count, setCount] = useState(0);
-    const [elementRef, isVisible] = useIntersectionObserver();
-    const [hasStarted, setHasStarted] = useState(false);
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[
+                    { icon: "🏆", title: "Excellence", desc: "Pursuing the highest standards" },
+                    { icon: "🤝", title: "Inclusivity", desc: "Every voice matters" },
+                    { icon: "💡", title: "Innovation", desc: "Embracing creative solutions" },
+                    { icon: "🔒", title: "Integrity", desc: "Transparency and accountability" }
+                ].map((value, index) => (
+                    <div key={index} className="bg-white rounded-2xl p-6 shadow-xl text-center hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div className="text-4xl mb-4">{value.icon}</div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">{value.title}</h3>
+                        <p className="text-gray-600">{value.desc}</p>
+                    </div>
+                ))}
+            </div>
 
-    useEffect(() => {
-        if (isVisible && !hasStarted && end > 0) {
-            setHasStarted(true);
-            let start = 0;
-            const increment = end / (duration / 16);
+            {/* Leadership Team */}
+            <div className="mt-20">
+                <div className="text-center mb-12">
+                    <h2 className="text-4xl font-bold text-gray-800 mb-4">Leadership Team</h2>
+                    <p className="text-xl text-gray-600">Experienced leaders driving transformation and innovation</p>
+                </div>
 
-            const timer = setInterval(() => {
-                start += increment;
-                if (start >= end) {
-                    setCount(end);
-                    clearInterval(timer);
-                } else {
-                    setCount(Math.floor(start));
-                }
-            }, 16);
-
-            return () => clearInterval(timer);
-        }
-    }, [isVisible, end, duration, hasStarted]);
-
-    return [elementRef, count];
-};
-
-// Animation Components
-const FadeInUp = ({ children, delay = 0, className = "" }) => {
-    const [elementRef, isVisible] = useIntersectionObserver(delay);
-
-    return (
-        <div
-            ref={elementRef}
-            className={`transform transition-all duration-700 ease-out ${
-                isVisible
-                    ? 'translate-y-0 opacity-100'
-                    : 'translate-y-8 opacity-0'
-            } ${className}`}
-        >
-            {children}
+                <div className="grid md:grid-cols-3 gap-8">
+                    {[
+                        { 
+                            name: "Hon. Amina Abdullahi", 
+                            position: "Executive Chairman", 
+                            image: "https://images.unsplash.com/photo-1494790108755-2616b9b9b1b8?w=300&h=400&fit=crop",
+                            experience: "15+ years in public service" 
+                        },
+                        { 
+                            name: "Dr. Ibrahim Hassan", 
+                            position: "Secretary", 
+                            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop",
+                            experience: "PhD in Public Administration" 
+                        },
+                        { 
+                            name: "Engr. Fatima Usman", 
+                            position: "Head of Digital Innovation", 
+                            image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=400&fit=crop",
+                            experience: "Tech entrepreneur & innovator" 
+                        }
+                    ].map((leader, index) => (
+                        <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                            <img
+                                src={leader.image}
+                                alt={leader.name}
+                                className="w-full h-64 object-cover"
+                            />
+                            <div className="p-6">
+                                <h3 className="text-xl font-bold text-gray-800 mb-1">{leader.name}</h3>
+                                <p className="text-green-600 font-semibold mb-2">{leader.position}</p>
+                                <p className="text-gray-600">{leader.experience}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-    );
-};
+    </div>
+);
 
-const SlideInLeft = ({ children, delay = 0, className = "" }) => {
-    const [elementRef, isVisible] = useIntersectionObserver(delay);
+// Beautiful Contact Page
+const BeautifulContactPage = () => (
+    <div className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-16">
+                <h1 className="text-5xl font-bold text-gray-800 mb-6">Get In Touch</h1>
+                <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+                    We're here to serve you 24/7. Reach out through any of our modern communication channels.
+                </p>
+            </div>
 
-    return (
-        <div
-            ref={elementRef}
-            className={`transform transition-all duration-700 ease-out ${
-                isVisible
-                    ? 'translate-x-0 opacity-100'
-                    : '-translate-x-8 opacity-0'
-            } ${className}`}
-        >
-            {children}
+            <div className="grid lg:grid-cols-3 gap-8 mb-16">
+                {[
+                    {
+                        icon: "📞",
+                        title: "Call Us",
+                        desc: "24/7 Citizen Support Hotline",
+                        contact: "+234 809 123 4567",
+                        color: "from-green-500 to-emerald-500"
+                    },
+                    {
+                        icon: "✉️",
+                        title: "Email Us",
+                        desc: "Quick Response within 2 hours",
+                        contact: "info@katsinalg.gov.ng",
+                        color: "from-blue-500 to-cyan-500"
+                    },
+                    {
+                        icon: "📍",
+                        title: "Visit Us",
+                        desc: "Modern Citizen Service Center",
+                        contact: "Katsina LG Secretariat, Katsina State",
+                        color: "from-purple-500 to-violet-500"
+                    }
+                ].map((contact, index) => (
+                    <div key={index} className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all text-center transform hover:-translate-y-2">
+                        <div className={`w-16 h-16 bg-gradient-to-r ${contact.color} rounded-2xl flex items-center justify-center text-white mb-6 mx-auto text-2xl`}>
+                            {contact.icon}
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-800 mb-2">{contact.title}</h3>
+                        <p className="text-gray-600 mb-4">{contact.desc}</p>
+                        <p className="text-lg font-semibold text-green-600">{contact.contact}</p>
+                    </div>
+                ))}
+            </div>
+
+            {/* Contact Form */}
+            <div className="grid lg:grid-cols-2 gap-12">
+                <div className="bg-gradient-to-br from-green-600 to-blue-600 rounded-3xl p-8 text-white">
+                    <h2 className="text-3xl font-bold mb-6">Office Hours</h2>
+                    <div className="space-y-4 text-lg">
+                        <div className="flex justify-between">
+                            <span>Monday - Friday:</span>
+                            <span className="font-semibold">8:00 AM - 6:00 PM</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Saturday:</span>
+                            <span className="font-semibold">9:00 AM - 2:00 PM</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Sunday:</span>
+                            <span className="font-semibold">Emergency Only</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Online Services:</span>
+                            <span className="font-semibold">24/7 Available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-3xl p-8 shadow-xl">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-6">Send us a Message</h2>
+                    <form className="space-y-6">
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                                <input type="text" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                                <input type="text" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                            <input type="text" className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                            <textarea rows={4} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                        </div>
+                        <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold transition-colors">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-    );
-};
+    </div>
+);
 
-const CountUp = ({ end, duration = 2000, suffix = "" }) => {
-    const [elementRef, count] = useCountUp(end, duration);
-
+// Main Website Wrapper
+const MainWebsite = () => {
     return (
-        <span ref={elementRef}>
-      {count.toLocaleString()}{suffix}
-    </span>
+        <BeautifulWebsite>
+            <Routes>
+                <Route path="/" element={<BeautifulHomePage />} />
+                <Route path="/media" element={<BeautifulMediaPage />} />
+                <Route path="/about" element={<BeautifulAboutPage />} />
+                <Route path="/contact" element={<BeautifulContactPage />} />
+            </Routes>
+        </BeautifulWebsite>
     );
-};
-
-// API Integration with improved error handling
-const API_BASE_URL = 'https://api.katsinalg.gov.ng/api';
-
-const useAPI = () => {
-    const [data, setData] = useState({
-        opportunities: [],
-        media: [],
-        stats: null
-    });
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [lastFetch, setLastFetch] = useState(null);
-
-    const fetchData = useCallback(async () => {
-        try {
-            setError(null);
-            const [publicData, statsData] = await Promise.all([
-                fetch(`${API_BASE_URL}/public-data`).then(r => r.ok ? r.json() : null),
-                fetch(`${API_BASE_URL}/public-stats`).then(r => r.ok ? r.json() : null)
-            ]);
-
-            setData({
-                opportunities: publicData?.data?.opportunities || [],
-                media: publicData?.data?.media || [],
-                stats: statsData?.data || null
-            });
-
-            setLastFetch(new Date().toISOString());
-        } catch (err) {
-            setError(err.message);
-            console.warn('API Error:', err);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        fetchData();
-        const interval = setInterval(fetchData, 30000); // 30 seconds
-        return () => clearInterval(interval);
-    }, [fetchData]);
-
-    return { data, loading, error, refetch: fetchData, lastFetch };
 };
 
 // Main App Component
-const KatsinaWebsite = () => {
-    const [currentPage, setCurrentPage] = useState('home');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [isScrolled, setIsScrolled] = useState(false);
-
-    const { data: apiData, loading: apiLoading, error: apiError, refetch } = useAPI();
-
-    // Sample/fallback data
-    const fallbackData = useMemo(() => ({
-        heroSlides: [
-            {
-                id: 1,
-                title: "Building Tomorrow's Katsina",
-                subtitle: "Innovative Governance, Sustainable Development",
-                description: "Leading Nigeria's most progressive local government through digital transformation, community empowerment, and sustainable development initiatives.",
-                image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=1200&h=600&fit=crop",
-                stats: { projects: 45, beneficiaries: 12500, investment: "₦2.4B" }
-            },
-            {
-                id: 2,
-                title: "Empowering Our Youth",
-                subtitle: "Education, Skills & Entrepreneurship",
-                description: "Comprehensive youth development programs creating opportunities through education, skills training, and entrepreneurship support for over 5,000 young people.",
-                image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=600&fit=crop",
-                stats: { programs: 12, graduates: 3200, funding: "₦850M" }
-            },
-            {
-                id: 3,
-                title: "Smart Infrastructure",
-                subtitle: "Modern Solutions for Growing Communities",
-                description: "Revolutionary infrastructure projects including smart roads, digital connectivity, renewable energy, and modern healthcare facilities across all communities.",
-                image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop",
-                stats: { roads: 120, connections: 8500, facilities: 28 }
-            }
-        ],
-        opportunities: [
-            {
-                id: 1,
-                title: "Digital Skills Empowerment Program",
-                category: "Training",
-                type: "Professional Development",
-                deadline: "2024-12-31",
-                duration: "6 months",
-                amount: "Free + ₦50,000 completion bonus",
-                participants: 234,
-                description: "Comprehensive digital literacy program covering web development, digital marketing, data analysis, and e-commerce. Includes mentorship, certification, and job placement assistance.",
-                requirements: [
-                    "Age 18-35 years",
-                    "Basic computer literacy",
-                    "Commitment to full program duration",
-                    "Resident of Katsina LGA"
-                ],
-                benefits: [
-                    "Industry-recognized certification",
-                    "Laptop provided during training",
-                    "3-month mentorship program",
-                    "Job placement assistance",
-                    "Startup funding opportunities"
-                ],
-                location: "Katsina Technology Hub",
-                contact: "digitalskills@katsinalg.gov.ng",
-                featured: true
-            },
-            {
-                id: 2,
-                title: "Women's Cooperative Development Grant",
-                category: "Grant",
-                type: "Business Development",
-                deadline: "2024-12-25",
-                amount: "₦2,000,000 per cooperative",
-                participants: 89,
-                description: "Supporting women's cooperatives with funding, training, and market access to build sustainable businesses in agriculture, crafts, and trading.",
-                requirements: [
-                    "Registered women's cooperative",
-                    "Minimum 10 active members",
-                    "Business plan required",
-                    "2+ years operational experience"
-                ],
-                benefits: [
-                    "Seed funding up to ₦2M",
-                    "Business development training",
-                    "Market linkage support",
-                    "Financial literacy program",
-                    "Mentorship from successful entrepreneurs"
-                ],
-                location: "Women's Development Center",
-                contact: "womencoop@katsinalg.gov.ng",
-                duration: "Ongoing",
-                featured: false
-            },
-            {
-                id: 3,
-                title: "Youth Agricultural Innovation Hub",
-                category: "Entrepreneurship",
-                type: "Agriculture & Technology",
-                deadline: "2024-12-15",
-                duration: "12 months",
-                amount: "₦5,000,000 total funding",
-                participants: 156,
-                description: "Revolutionary program combining modern farming techniques with technology to create next-generation agricultural entrepreneurs and food security solutions.",
-                requirements: [
-                    "Age 18-40 years",
-                    "Interest in agriculture/agtech",
-                    "Basic education certificate",
-                    "Innovation mindset"
-                ],
-                benefits: [
-                    "Modern farming equipment access",
-                    "Greenhouse farming training",
-                    "Digital agriculture tools",
-                    "Market guarantee for produce",
-                    "International exchange program"
-                ],
-                location: "Agricultural Innovation Center",
-                contact: "agritech@katsinalg.gov.ng",
-                featured: true
-            }
-        ],
-        services: [
-            {
-                id: 1,
-                title: "Digital Certificate Services",
-                description: "Birth, death, marriage certificates with blockchain verification",
-                icon: <FileText className="w-12 h-12" />,
-                features: ["Online application", "24/7 processing", "Mobile verification", "International recognition"],
-                processingTime: "24 hours",
-                cost: "₦2,000 - ₦5,000",
-                rating: 4.9
-            },
-            {
-                id: 2,
-                title: "Smart Business Registration",
-                description: "AI-powered business registration with integrated tax setup",
-                icon: <Briefcase className="w-12 h-12" />,
-                features: ["One-click registration", "Tax ID generation", "Bank account setup", "License processing"],
-                processingTime: "48 hours",
-                cost: "₦10,000 - ₦25,000",
-                rating: 4.8
-            },
-            {
-                id: 3,
-                title: "Digital Land Services",
-                description: "Blockchain-secured land titles and property management",
-                icon: <MapPin className="w-12 h-12" />,
-                features: ["Satellite verification", "Fraud protection", "Transfer automation", "Investment tracking"],
-                processingTime: "7 days",
-                cost: "₦15,000 - ₦50,000",
-                rating: 4.7
-            },
-            {
-                id: 4,
-                title: "Smart Tax Solutions",
-                description: "Automated tax calculation and payment with incentives",
-                icon: <DollarSign className="w-12 h-12" />,
-                features: ["Auto calculation", "Mobile payments", "Loyalty rewards", "Investment advice"],
-                processingTime: "Instant",
-                cost: "Standard rates + bonuses",
-                rating: 4.6
-            }
-        ],
-        mediaItems: [
-            {
-                id: 1,
-                title: "Katsina Smart City Initiative Launch",
-                type: "video",
-                category: "Infrastructure",
-                date: "2024-11-10",
-                duration: "12:34",
-                views: 15420,
-                thumbnail: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=400&h=250&fit=crop",
-                description: "Governor launches ambitious smart city project transforming Katsina into Nigeria's most connected local government area with fiber optic networks, smart traffic systems, and digital governance platforms."
-            },
-            {
-                id: 2,
-                title: "Revolutionary Healthcare Centers Unveiled",
-                type: "image",
-                category: "Healthcare",
-                date: "2024-11-08",
-                views: 8930,
-                thumbnail: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=250&fit=crop",
-                description: "State-of-the-art primary healthcare centers equipped with telemedicine capabilities, solar power, and modern medical equipment serving 12 communities across Katsina LGA."
-            },
-            {
-                id: 3,
-                title: "Agricultural Innovation Report 2024",
-                type: "document",
-                category: "Agriculture",
-                date: "2024-11-05",
-                pages: 48,
-                downloads: 2340,
-                thumbnail: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&h=250&fit=crop",
-                description: "Comprehensive analysis of agricultural transformation initiatives, showcasing 300% increase in crop yields through smart farming techniques and modern irrigation systems."
-            }
-        ]
-    }), []);
-
-    // Merge API data with fallback data
-    const mergedData = useMemo(() => ({
-        opportunities: apiData.opportunities.length > 0 ?
-            apiData.opportunities.map(opp => ({
-                ...opp,
-                id: opp._id || opp.id,
-                category: opp.category || 'General',
-                deadline: opp.deadline || '2024-12-31',
-                description: opp.description || 'No description available',
-                requirements: opp.requirements || ['Contact for details'],
-                benefits: opp.benefits || [
-                    'Professional development',
-                    'Skill enhancement',
-                    'Networking opportunities',
-                    'Certificate of completion',
-                    'Ongoing support'
-                ],
-                location: opp.location || 'Katsina Local Government',
-                contact: opp.contact || 'info@katsinalg.gov.ng',
-                featured: opp.featured || false,
-                participants: opp.applicants || opp.participants || 0,
-                amount: opp.amount || 'Contact for details',
-                duration: opp.duration || 'Varies',
-                type: opp.type || 'Development Program'
-            })) : fallbackData.opportunities,
-
-        mediaItems: apiData.media.length > 0 ?
-            apiData.media.map(item => ({
-                ...item,
-                id: item._id || item.id,
-                thumbnail: item.fileUrl || item.image || fallbackData.mediaItems[0].thumbnail,
-                category: item.tags?.[0] || item.category || 'General',
-                date: item.createdAt ? new Date(item.createdAt).toLocaleDateString() : item.date,
-                views: item.views || Math.floor(Math.random() * 10000) + 1000,
-                type: item.type || 'article'
-            })) : fallbackData.mediaItems,
-
-        quickStats: apiData.stats ? [
-            { label: "Active Projects", value: apiData.stats.totalOpportunities || 156, icon: <Building className="w-8 h-8" />, color: "bg-blue-500" },
-            { label: "Beneficiaries", value: apiData.stats.totalApplicants || 45200, icon: <Users className="w-8 h-8" />, color: "bg-green-500" },
-            { label: "Programs", value: apiData.stats.activeOpportunities || 89, icon: <Target className="w-8 h-8" />, color: "bg-purple-500" },
-            { label: "Media Items", value: apiData.stats.totalMedia || 67, icon: <Heart className="w-8 h-8" />, color: "bg-red-500" }
-        ] : [
-            { label: "Active Projects", value: 156, icon: <Building className="w-8 h-8" />, color: "bg-blue-500" },
-            { label: "Beneficiaries", value: 45200, icon: <Users className="w-8 h-8" />, color: "bg-green-500" },
-            { label: "Programs", value: 89, icon: <Target className="w-8 h-8" />, color: "bg-purple-500" },
-            { label: "Communities", value: 67, icon: <Heart className="w-8 h-8" />, color: "bg-red-500" }
-        ]
-    }), [apiData, fallbackData]);
-
-    // Auto-slide effect
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % fallbackData.heroSlides.length);
-        }, 6000);
-        return () => clearInterval(timer);
-    }, [fallbackData.heroSlides.length]);
-
-    // Scroll effect for header
-    useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 50);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    // Navigation items
-    const navItems = [
-        { id: 'home', label: 'Home', icon: <Home className="w-5 h-5" /> },
-        { id: 'opportunities', label: 'Opportunities', icon: <Target className="w-5 h-5" /> },
-        { id: 'services', label: 'Services', icon: <Building className="w-5 h-5" /> },
-        { id: 'media', label: 'Media', icon: <FileText className="w-5 h-5" /> },
-        { id: 'about', label: 'About', icon: <Users className="w-5 h-5" /> },
-        { id: 'contact', label: 'Contact', icon: <Phone className="w-5 h-5" /> }
-    ];
-
-    // Loading Component
-    const LoadingCard = ({ className = "" }) => (
-        <div className={`bg-white rounded-2xl shadow-xl animate-pulse ${className}`}>
-            <div className="p-6 space-y-4">
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                <div className="h-8 bg-gray-200 rounded"></div>
-            </div>
-        </div>
-    );
-
-    // API Status Indicator
-    const APIStatusIndicator = () => (
-        <div className="fixed bottom-4 right-4 z-50">
-            <div className={`px-3 py-2 rounded-full text-sm font-medium flex items-center gap-2 shadow-lg ${
-                apiLoading
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : apiError
-                        ? 'bg-red-100 text-red-800'
-                        : mergedData.opportunities.length > 0 || mergedData.mediaItems.length > 0
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-gray-100 text-gray-800'
-            }`}>
-                {apiLoading ? (
-                    <RefreshCw className="w-3 h-3 animate-spin" />
-                ) : apiError ? (
-                    <WifiOff className="w-3 h-3" />
-                ) : (
-                    <Wifi className="w-3 h-3" />
-                )}
-                {apiLoading ? 'Syncing...' :
-                    apiError ? 'Offline' :
-                        apiData.opportunities.length > 0 || apiData.media.length > 0 ? 'Live Data' : 'Demo Mode'}
-            </div>
-        </div>
-    );
-
-    // Error Boundary Component
-    const ErrorBoundary = ({ children, fallback }) => {
-        try {
-            return children;
-        } catch (error) {
-            console.error('Render error:', error);
-            return fallback || <div className="text-center p-8 text-red-600">Something went wrong. Please refresh the page.</div>;
-        }
-    };
-
-    // Header Component
-    const Header = () => (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            isScrolled
-                ? 'bg-white/95 backdrop-blur-md shadow-lg'
-                : 'bg-gradient-to-b from-black/20 to-transparent'
-        }`}>
-            <div className="h-1 bg-gradient-to-r from-green-600 via-white to-green-600"></div>
-
-            <div className="container mx-auto px-4 py-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg">
-                            <span className="font-bold text-lg text-white">KLG</span>
-                        </div>
-                        <div className={`${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-                            <h1 className="text-xl font-bold">Katsina Local Government</h1>
-                            <p className="text-sm opacity-80">Home of Innovation & Prosperity</p>
-                        </div>
-                    </div>
-
-                    <nav className="hidden md:flex items-center gap-8">
-                        {navItems.map((item) => (
-                            <button
-                                key={item.id}
-                                onClick={() => setCurrentPage(item.id)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                    currentPage === item.id
-                                        ? 'bg-green-600 text-white shadow-lg'
-                                        : isScrolled
-                                            ? 'text-gray-700 hover:text-green-600 hover:bg-green-50'
-                                            : 'text-white hover:text-green-300 hover:bg-white/10'
-                                }`}
-                            >
-                                {item.icon}
-                                {item.label}
-                            </button>
-                        ))}
-                    </nav>
-
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className={`md:hidden p-2 rounded-lg ${
-                            isScrolled ? 'text-gray-700' : 'text-white'
-                        }`}
-                    >
-                        {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                    </button>
-                </div>
-
-                {isMenuOpen && (
-                    <div className="md:hidden mt-4 p-4 bg-white rounded-xl shadow-xl">
-                        {navItems.map((item) => (
-                            <button
-                                key={item.id}
-                                onClick={() => {
-                                    setCurrentPage(item.id);
-                                    setIsMenuOpen(false);
-                                }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                                    currentPage === item.id
-                                        ? 'bg-green-600 text-white'
-                                        : 'text-gray-700 hover:bg-green-50'
-                                }`}
-                            >
-                                {item.icon}
-                                {item.label}
-                            </button>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </header>
-    );
-
-    // Home Page Component
-    const HomePage = () => (
-        <ErrorBoundary>
-            <div className="pt-20">
-                {/* Hero Section */}
-                <section className="relative h-screen flex items-center justify-center overflow-hidden">
-                    <div className="absolute inset-0">
-                        <img
-                            src={fallbackData.heroSlides[currentSlide].image}
-                            alt={fallbackData.heroSlides[currentSlide].title}
-                            className="w-full h-full object-cover transition-all duration-1000"
-                            loading="eager"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-green-900/80 via-green-800/60 to-blue-900/80"></div>
-                    </div>
-
-                    <div className="relative z-10 container mx-auto px-4 text-center text-white">
-                        <FadeInUp>
-                            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                                {fallbackData.heroSlides[currentSlide].title}
-                            </h1>
-                        </FadeInUp>
-
-                        <FadeInUp delay={200}>
-                            <p className="text-2xl md:text-3xl mb-4 font-light opacity-90">
-                                {fallbackData.heroSlides[currentSlide].subtitle}
-                            </p>
-                        </FadeInUp>
-
-                        <FadeInUp delay={400}>
-                            <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto opacity-80 leading-relaxed">
-                                {fallbackData.heroSlides[currentSlide].description}
-                            </p>
-                        </FadeInUp>
-
-                        <FadeInUp delay={600}>
-                            <div className="flex flex-col md:flex-row gap-4 justify-center mb-12">
-                                <button
-                                    onClick={() => setCurrentPage('opportunities')}
-                                    className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
-                                >
-                                    Explore Opportunities
-                                    <ArrowRight className="w-6 h-6 inline ml-2" />
-                                </button>
-                                <button
-                                    onClick={() => setCurrentPage('services')}
-                                    className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 border border-white/30"
-                                >
-                                    Our Services
-                                </button>
-                            </div>
-                        </FadeInUp>
-
-                        <FadeInUp delay={800}>
-                            <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto">
-                                {Object.entries(fallbackData.heroSlides[currentSlide].stats).map(([key, value], index) => (
-                                    <div key={key} className="text-center">
-                                        <div className="text-3xl md:text-4xl font-bold text-green-300">
-                                            <CountUp end={typeof value === 'string' ? parseInt(value.replace(/[^\d]/g, '')) : value} />
-                                            {typeof value === 'string' && value.includes('B') ? 'B' :
-                                                typeof value === 'string' && value.includes('M') ? 'M' : ''}
-                                        </div>
-                                        <div className="text-sm uppercase tracking-wider opacity-80">
-                                            {key.replace(/([A-Z])/g, ' $1').trim()}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </FadeInUp>
-                    </div>
-
-                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3">
-                        {fallbackData.heroSlides.map((_, index) => (
-                            <button
-                                key={index}
-                                onClick={() => setCurrentSlide(index)}
-                                className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                                    index === currentSlide
-                                        ? 'bg-white scale-125'
-                                        : 'bg-white/50 hover:bg-white/75'
-                                }`}
-                            />
-                        ))}
-                    </div>
-                </section>
-
-                {/* Quick Stats */}
-                <section className="py-20 bg-gradient-to-br from-green-50 to-blue-50">
-                    <div className="container mx-auto px-4">
-                        <FadeInUp>
-                            <div className="text-center mb-16">
-                                <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                                    Impact at a Glance
-                                </h2>
-                                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                                    Transforming lives through innovative programs and sustainable development initiatives across Katsina Local Government Area.
-                                </p>
-                            </div>
-                        </FadeInUp>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                            {apiLoading ? (
-                                [...Array(4)].map((_, index) => (
-                                    <LoadingCard key={index} className="p-8 text-center" />
-                                ))
-                            ) : (
-                                mergedData.quickStats.map((stat, index) => (
-                                    <FadeInUp key={index} delay={index * 100}>
-                                        <div className="bg-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                            <div className={`w-16 h-16 ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-6 text-white shadow-lg`}>
-                                                {stat.icon}
-                                            </div>
-                                            <div className="text-4xl font-bold text-gray-800 mb-2">
-                                                <CountUp end={stat.value} />
-                                            </div>
-                                            <div className="text-gray-600 font-medium">
-                                                {stat.label}
-                                            </div>
-                                        </div>
-                                    </FadeInUp>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Featured Opportunities Preview */}
-                <section className="py-20">
-                    <div className="container mx-auto px-4">
-                        <FadeInUp>
-                            <div className="text-center mb-16">
-                                <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                                    Featured Opportunities
-                                </h2>
-                                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                                    Life-changing programs designed to empower every citizen of Katsina with skills, resources, and opportunities for success.
-                                </p>
-                            </div>
-                        </FadeInUp>
-
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {apiLoading ? (
-                                [...Array(3)].map((_, index) => (
-                                    <LoadingCard key={index} className="overflow-hidden">
-                                        <div className="bg-gray-200 h-32 animate-pulse"></div>
-                                        <div className="p-6 space-y-4">
-                                            <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                                            <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
-                                            <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                                        </div>
-                                    </LoadingCard>
-                                ))
-                            ) : (
-                                mergedData.opportunities.filter(opp => opp.featured).map((opportunity, index) => (
-                                    <FadeInUp key={opportunity.id} delay={index * 200}>
-                                        <div className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                            <div className="bg-gradient-to-r from-green-600 to-blue-600 p-6 text-white">
-                                                <div className="flex items-center justify-between mb-4">
-                          <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
-                            {opportunity.category}
-                          </span>
-                                                    <span className="text-sm opacity-90">
-                            {opportunity.participants} participants
-                          </span>
-                                                </div>
-                                                <h3 className="text-2xl font-bold mb-2">{opportunity.title}</h3>
-                                                <p className="opacity-90">{opportunity.description.substring(0, 120)}...</p>
-                                            </div>
-
-                                            <div className="p-6">
-                                                <div className="space-y-4 mb-6">
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-gray-600">Duration:</span>
-                                                        <span className="font-semibold">{opportunity.duration}</span>
-                                                    </div>
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-gray-600">Value:</span>
-                                                        <span className="font-semibold text-green-600">{opportunity.amount}</span>
-                                                    </div>
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-gray-600">Deadline:</span>
-                                                        <span className="font-semibold text-red-600">
-                              {new Date(opportunity.deadline).toLocaleDateString()}
-                            </span>
-                                                    </div>
-                                                </div>
-
-                                                <button
-                                                    onClick={() => setCurrentPage('opportunities')}
-                                                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
-                                                >
-                                                    Learn More & Apply
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </FadeInUp>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </ErrorBoundary>
-    );
-
-    // Opportunities Page Component
-    const OpportunitiesPage = () => (
-        <ErrorBoundary>
-            <div className="pt-32 pb-20">
-                <div className="container mx-auto px-4">
-                    <FadeInUp>
-                        <div className="text-center mb-16">
-                            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-                                Life-Changing Opportunities
-                            </h1>
-                            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                                Discover comprehensive programs designed to transform lives, build skills, and create sustainable prosperity for every citizen of Katsina Local Government Area.
-                            </p>
-                        </div>
-                    </FadeInUp>
-
-                    {apiError && (
-                        <FadeInUp>
-                            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-8 flex items-center gap-3">
-                                <AlertCircle className="w-5 h-5 text-yellow-600" />
-                                <div>
-                                    <p className="text-yellow-800 font-medium">Using demo data</p>
-                                    <p className="text-yellow-600 text-sm">Live data unavailable. Showing sample opportunities.</p>
-                                </div>
-                                <button
-                                    onClick={refetch}
-                                    className="ml-auto px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded-lg transition-colors"
-                                >
-                                    Retry
-                                </button>
-                            </div>
-                        </FadeInUp>
-                    )}
-
-                    <div className="space-y-12">
-                        {mergedData.opportunities.map((opportunity, index) => (
-                            <FadeInUp key={opportunity.id} delay={index * 200}>
-                                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                                    <div className={`bg-gradient-to-r ${
-                                        opportunity.featured
-                                            ? 'from-green-600 to-blue-600'
-                                            : 'from-gray-600 to-gray-800'
-                                    } p-8 text-white`}>
-                                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                                            <div className="flex-1">
-                                                <div className="flex items-center gap-4 mb-4 flex-wrap">
-                          <span className="bg-white/20 px-4 py-2 rounded-full font-medium">
-                            {opportunity.category}
-                          </span>
-                                                    <span className="bg-white/20 px-4 py-2 rounded-full font-medium">
-                            {opportunity.type}
-                          </span>
-                                                    {opportunity.featured && (
-                                                        <span className="bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold flex items-center gap-2">
-                              <Star className="w-4 h-4" />
-                              Featured
-                            </span>
-                                                    )}
-                                                </div>
-                                                <h2 className="text-3xl md:text-4xl font-bold mb-4">{opportunity.title}</h2>
-                                                <p className="text-xl opacity-90">{opportunity.description}</p>
-                                            </div>
-
-                                            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 min-w-[300px]">
-                                                <div className="text-center">
-                                                    <div className="text-3xl font-bold mb-2">{opportunity.participants}</div>
-                                                    <div className="text-sm opacity-80">Active Participants</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="p-8">
-                                        <div className="grid lg:grid-cols-2 gap-12">
-                                            {/* Left Column - Details */}
-                                            <div className="space-y-8">
-                                                <div>
-                                                    <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                                        <Calendar className="w-6 h-6 text-green-600" />
-                                                        Program Details
-                                                    </h3>
-                                                    <div className="space-y-4">
-                                                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                                            <span className="font-medium text-gray-700">Duration:</span>
-                                                            <span className="font-bold text-gray-900">{opportunity.duration}</span>
-                                                        </div>
-                                                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                                            <span className="font-medium text-gray-700">Value/Funding:</span>
-                                                            <span className="font-bold text-green-600">{opportunity.amount}</span>
-                                                        </div>
-                                                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                                            <span className="font-medium text-gray-700">Application Deadline:</span>
-                                                            <span className="font-bold text-red-600">
-                                {new Date(opportunity.deadline).toLocaleDateString()}
-                              </span>
-                                                        </div>
-                                                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                                            <span className="font-medium text-gray-700">Location:</span>
-                                                            <span className="font-bold text-gray-900">{opportunity.location}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                                        <FileText className="w-6 h-6 text-blue-600" />
-                                                        Requirements
-                                                    </h3>
-                                                    <ul className="space-y-3">
-                                                        {opportunity.requirements.map((req, reqIndex) => (
-                                                            <li key={reqIndex} className="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
-                                                                <ChevronRight className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                                                                <span className="text-gray-700">{req}</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                            {/* Right Column - Benefits & Action */}
-                                            <div className="space-y-8">
-                                                <div>
-                                                    <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                                        <Award className="w-6 h-6 text-yellow-600" />
-                                                        Program Benefits
-                                                    </h3>
-                                                    <ul className="space-y-3">
-                                                        {opportunity.benefits.map((benefit, benefitIndex) => (
-                                                            <li key={benefitIndex} className="flex items-start gap-3 p-3 bg-green-50 rounded-xl">
-                                                                <Star className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                                <span className="text-gray-700">{benefit}</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-
-                                                <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-2xl">
-                                                    <h4 className="text-xl font-bold text-gray-800 mb-4">Ready to Apply?</h4>
-                                                    <p className="text-gray-600 mb-6">
-                                                        Join thousands of citizens who have transformed their lives through our programs.
-                                                    </p>
-                                                    <div className="space-y-3">
-                                                        <button className="w-full bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-                                                            Apply Now
-                                                        </button>
-                                                        <button className="w-full bg-white hover:bg-gray-50 text-gray-700 py-3 px-6 rounded-xl font-semibold border border-gray-300 transition-all duration-300">
-                                                            Download Brochure
-                                                        </button>
-                                                    </div>
-                                                    <div className="mt-4 text-center">
-                                                        <p className="text-sm text-gray-600">
-                                                            Contact: <a href={`mailto:${opportunity.contact}`} className="text-green-600 hover:text-green-700 font-semibold">{opportunity.contact}</a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </FadeInUp>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </ErrorBoundary>
-    );
-
-    // Services Page Component
-    const ServicesPage = () => (
-        <ErrorBoundary>
-            <div className="pt-32 pb-20">
-                <div className="container mx-auto px-4">
-                    <FadeInUp>
-                        <div className="text-center mb-16">
-                            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-                                Smart Government Services
-                            </h1>
-                            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                                Experience the future of government services with our AI-powered, blockchain-secured, and citizen-centric digital solutions designed for efficiency, transparency, and convenience.
-                            </p>
-                        </div>
-                    </FadeInUp>
-
-                    <div className="grid md:grid-cols-2 gap-12">
-                        {fallbackData.services.map((service, index) => (
-                            <FadeInUp key={service.id} delay={index * 200}>
-                                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
-                                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
-                                        <div className="flex items-center gap-4 mb-6">
-                                            <div className="bg-white/20 p-4 rounded-2xl">
-                                                {service.icon}
-                                            </div>
-                                            <div>
-                                                <h2 className="text-2xl font-bold">{service.title}</h2>
-                                                <div className="flex items-center gap-2 mt-2">
-                                                    <div className="flex items-center">
-                                                        {[...Array(5)].map((_, i) => (
-                                                            <Star
-                                                                key={i}
-                                                                className={`w-4 h-4 ${
-                                                                    i < Math.floor(service.rating)
-                                                                        ? 'text-yellow-400 fill-current'
-                                                                        : 'text-white/30'
-                                                                }`}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                    <span className="text-yellow-400 font-semibold">{service.rating}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p className="text-xl opacity-90">{service.description}</p>
-                                    </div>
-
-                                    <div className="p-8">
-                                        <div className="space-y-6">
-                                            <div>
-                                                <h3 className="text-xl font-bold text-gray-800 mb-4">Key Features</h3>
-                                                <ul className="space-y-3">
-                                                    {service.features.map((feature, featureIndex) => (
-                                                        <li key={featureIndex} className="flex items-center gap-3">
-                                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                            <span className="text-gray-700">{feature}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div className="bg-green-50 p-4 rounded-xl">
-                                                    <div className="text-sm text-green-600 font-medium">Processing Time</div>
-                                                    <div className="text-lg font-bold text-green-800">{service.processingTime}</div>
-                                                </div>
-                                                <div className="bg-blue-50 p-4 rounded-xl">
-                                                    <div className="text-sm text-blue-600 font-medium">Cost</div>
-                                                    <div className="text-lg font-bold text-blue-800">{service.cost}</div>
-                                                </div>
-                                            </div>
-
-                                            <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-                                                Start Application
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </FadeInUp>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </ErrorBoundary>
-    );
-
-    // Media Page Component
-    const MediaPage = () => (
-        <ErrorBoundary>
-            <div className="pt-32 pb-20">
-                <div className="container mx-auto px-4">
-                    <FadeInUp>
-                        <div className="text-center mb-16">
-                            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-                                Media & News Center
-                            </h1>
-                            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                                Stay informed with the latest developments, success stories, and transformative projects shaping the future of Katsina Local Government Area.
-                            </p>
-                        </div>
-                    </FadeInUp>
-
-                    <div className="space-y-12">
-                        {mergedData.mediaItems.map((item, index) => (
-                            <FadeInUp key={item.id} delay={index * 200}>
-                                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
-                                    <div className="grid lg:grid-cols-2 gap-0">
-                                        <div className="relative">
-                                            <img
-                                                src={item.thumbnail}
-                                                alt={item.title}
-                                                className="w-full h-64 lg:h-full object-cover"
-                                                loading="lazy"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-
-                                            <div className="absolute top-4 left-4">
-                        <span className={`px-3 py-1 rounded-full text-sm font-bold text-white ${
-                            item.type === 'video' ? 'bg-red-500' :
-                                item.type === 'document' ? 'bg-blue-500' : 'bg-green-500'
-                        }`}>
-                          {item.type.toUpperCase()}
-                        </span>
-                                            </div>
-
-                                            {item.type === 'video' && (
-                                                <div className="absolute inset-0 flex items-center justify-center">
-                                                    <button className="bg-white/20 backdrop-blur-sm border-2 border-white rounded-full p-4 hover:bg-white/30 transition-all duration-300 transform hover:scale-110">
-                                                        <Play className="w-8 h-8 text-white" />
-                                                    </button>
-                                                </div>
-                                            )}
-
-                                            <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2 text-white text-sm">
-                                                {item.type === 'video' && item.duration && (
-                                                    <div className="flex items-center gap-2">
-                                                        <Clock className="w-4 h-4" />
-                                                        {item.duration}
-                                                    </div>
-                                                )}
-                                                {item.type === 'document' && item.pages && (
-                                                    <div className="flex items-center gap-2">
-                                                        <FileText className="w-4 h-4" />
-                                                        {item.pages} pages
-                                                    </div>
-                                                )}
-                                                <div className="flex items-center gap-2 mt-1">
-                                                    <Eye className="w-4 h-4" />
-                                                    {item.views?.toLocaleString() || item.downloads?.toLocaleString() || '0'}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="p-8 lg:p-12 flex flex-col justify-center">
-                                            <div className="mb-4">
-                        <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                          {item.category}
-                        </span>
-                                            </div>
-
-                                            <h2 className="text-3xl font-bold text-gray-800 mb-4 leading-tight">
-                                                {item.title}
-                                            </h2>
-
-                                            <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                                                {item.description}
-                                            </p>
-
-                                            <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
-                        <span className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                            {item.date}
-                        </span>
-                                                <span className="flex items-center gap-2">
-                          <Eye className="w-4 h-4" />
-                                                    {item.views?.toLocaleString() || item.downloads?.toLocaleString() || '0'} {item.type === 'document' ? 'downloads' : 'views'}
-                        </span>
-                                            </div>
-
-                                            <div className="flex gap-4">
-                                                <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
-                                                    {item.type === 'video' ? <Play className="w-5 h-5" /> :
-                                                        item.type === 'document' ? <Download className="w-5 h-5" /> :
-                                                            <Eye className="w-5 h-5" />}
-                                                    {item.type === 'video' ? 'Watch Now' :
-                                                        item.type === 'document' ? 'Download' : 'View Gallery'}
-                                                </button>
-                                                <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
-                                                    Share
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </FadeInUp>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </ErrorBoundary>
-    );
-
-    // About Page Component
-    const AboutPage = () => (
-        <ErrorBoundary>
-            <div className="pt-32 pb-20">
-                <div className="container mx-auto px-4">
-                    <FadeInUp>
-                        <div className="text-center mb-16">
-                            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-                                About Katsina Local Government
-                            </h1>
-                            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                                Leading Nigeria's digital transformation in local governance through innovation, transparency, and citizen-centric services that empower communities and create sustainable prosperity.
-                            </p>
-                        </div>
-                    </FadeInUp>
-
-                    <div className="grid lg:grid-cols-2 gap-12 mb-20">
-                        <SlideInLeft>
-                            <div className="bg-gradient-to-br from-green-600 to-blue-600 rounded-3xl p-8 text-white">
-                                <Target className="w-12 h-12 mb-6" />
-                                <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
-                                <p className="text-xl leading-relaxed opacity-90">
-                                    To be Africa's most innovative and digitally advanced local government, creating a model of excellence in governance, citizen engagement, and sustainable development that inspires transformation across Nigeria.
-                                </p>
-                            </div>
-                        </SlideInLeft>
-
-                        <SlideInLeft delay={200}>
-                            <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl p-8 text-white">
-                                <Heart className="w-12 h-12 mb-6" />
-                                <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-                                <p className="text-xl leading-relaxed opacity-90">
-                                    To serve our diverse community with integrity, innovation, and excellence by providing world-class digital services, creating economic opportunities, and building sustainable infrastructure that improves lives and fosters prosperity for all.
-                                </p>
-                            </div>
-                        </SlideInLeft>
-                    </div>
-
-                    <FadeInUp>
-                        <div className="text-center mb-12">
-                            <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Core Values</h2>
-                            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                                The principles that guide every decision, program, and service we deliver to our community.
-                            </p>
-                        </div>
-                    </FadeInUp>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-                        {[
-                            { icon: <Award className="w-8 h-8" />, title: "Excellence", desc: "Pursuing the highest standards in everything we do", color: "from-yellow-500 to-orange-500" },
-                            { icon: <Users className="w-8 h-8" />, title: "Inclusivity", desc: "Ensuring every voice is heard and every citizen matters", color: "from-blue-500 to-cyan-500" },
-                            { icon: <Globe className="w-8 h-8" />, title: "Innovation", desc: "Embracing technology and creative solutions", color: "from-purple-500 to-indigo-500" },
-                            { icon: <Heart className="w-8 h-8" />, title: "Integrity", desc: "Operating with transparency and accountability", color: "from-green-500 to-teal-500" }
-                        ].map((value, index) => (
-                            <FadeInUp key={index} delay={index * 100}>
-                                <div className="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                    <div className={`w-16 h-16 bg-gradient-to-r ${value.color} rounded-2xl flex items-center justify-center text-white mb-4 mx-auto`}>
-                                        {value.icon}
-                                    </div>
-                                    <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">{value.title}</h3>
-                                    <p className="text-gray-600 text-center">{value.desc}</p>
-                                </div>
-                            </FadeInUp>
-                        ))}
-                    </div>
-
-                    <FadeInUp>
-                        <div className="text-center mb-12">
-                            <h2 className="text-4xl font-bold text-gray-800 mb-4">Leadership Team</h2>
-                            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                                Experienced leaders driving transformation and innovation in local governance.
-                            </p>
-                        </div>
-                    </FadeInUp>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {[
-                            { name: "Hon. Amina Abdullahi", position: "Executive Chairman", image: "https://images.unsplash.com/photo-1494790108755-2616b9b9b1b8?w=300&h=400&fit=crop", experience: "15+ years in public service" },
-                            { name: "Dr. Ibrahim Hassan", position: "Secretary", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop", experience: "PhD in Public Administration" },
-                            { name: "Engr. Fatima Usman", position: "Head of Digital Innovation", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=400&fit=crop", experience: "Tech entrepreneur & innovator" }
-                        ].map((leader, index) => (
-                            <FadeInUp key={index} delay={index * 200}>
-                                <div className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                    <img
-                                        src={leader.image}
-                                        alt={leader.name}
-                                        className="w-full h-64 object-cover"
-                                        loading="lazy"
-                                    />
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-bold text-gray-800 mb-1">{leader.name}</h3>
-                                        <p className="text-green-600 font-semibold mb-2">{leader.position}</p>
-                                        <p className="text-gray-600">{leader.experience}</p>
-                                    </div>
-                                </div>
-                            </FadeInUp>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </ErrorBoundary>
-    );
-
-    // Contact Page Component
-    const ContactPage = () => (
-        <ErrorBoundary>
-            <div className="pt-32 pb-20">
-                <div className="container mx-auto px-4">
-                    <FadeInUp>
-                        <div className="text-center mb-16">
-                            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-                                Get In Touch
-                            </h1>
-                            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                                We're here to serve you 24/7. Reach out through any of our modern communication channels and experience our commitment to responsive, citizen-centric service.
-                            </p>
-                        </div>
-                    </FadeInUp>
-
-                    <div className="grid lg:grid-cols-3 gap-8 mb-16">
-                        {[
-                            {
-                                icon: <Phone className="w-8 h-8" />,
-                                title: "Call Us",
-                                desc: "24/7 Citizen Support Hotline",
-                                contact: "+234 809 123 4567",
-                                action: "tel:+2348091234567",
-                                color: "from-green-500 to-emerald-500"
-                            },
-                            {
-                                icon: <Mail className="w-8 h-8" />,
-                                title: "Email Us",
-                                desc: "Quick Response within 2 hours",
-                                contact: "info@katsinalg.gov.ng",
-                                action: "mailto:info@katsinalg.gov.ng",
-                                color: "from-blue-500 to-cyan-500"
-                            },
-                            {
-                                icon: <MapPin className="w-8 h-8" />,
-                                title: "Visit Us",
-                                desc: "Modern Citizen Service Center",
-                                contact: "Katsina LG Secretariat, Katsina State",
-                                action: "https://maps.google.com/?q=Katsina+LG+Secretariat",
-                                color: "from-purple-500 to-violet-500"
-                            }
-                        ].map((contact, index) => (
-                            <FadeInUp key={index} delay={index * 200}>
-                                <div
-                                    className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
-                                    onClick={() => window.open(contact.action, contact.action.startsWith('http') ? '_blank' : '_self')}
-                                >
-                                    <div className={`w-16 h-16 bg-gradient-to-r ${contact.color} rounded-2xl flex items-center justify-center text-white mb-6 mx-auto`}>
-                                        {contact.icon}
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-gray-800 mb-2 text-center">{contact.title}</h3>
-                                    <p className="text-gray-600 text-center mb-4">{contact.desc}</p>
-                                    <p className="text-lg font-semibold text-center text-green-600">{contact.contact}</p>
-                                </div>
-                            </FadeInUp>
-                        ))}
-                    </div>
-
-                    <div className="grid lg:grid-cols-2 gap-12">
-                        <FadeInUp>
-                            <div className="bg-gradient-to-br from-green-600 to-blue-600 rounded-3xl p-8 text-white">
-                                <Clock className="w-12 h-12 mb-6" />
-                                <h2 className="text-3xl font-bold mb-6">Office Hours</h2>
-                                <div className="space-y-4 text-lg">
-                                    <div className="flex justify-between">
-                                        <span>Monday - Friday:</span>
-                                        <span className="font-semibold">8:00 AM - 6:00 PM</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Saturday:</span>
-                                        <span className="font-semibold">9:00 AM - 2:00 PM</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Sunday:</span>
-                                        <span className="font-semibold">Emergency Services Only</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Online Services:</span>
-                                        <span className="font-semibold">24/7 Available</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </FadeInUp>
-
-                        <FadeInUp delay={200}>
-                            <div className="bg-white rounded-3xl p-8 shadow-xl">
-                                <Globe className="w-12 h-12 text-green-600 mb-6" />
-                                <h2 className="text-3xl font-bold text-gray-800 mb-6">Follow Our Journey</h2>
-                                <p className="text-gray-600 mb-6">
-                                    Stay connected with our latest updates, success stories, and community initiatives.
-                                </p>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {[
-                                        { icon: <Facebook className="w-6 h-6" />, name: "Facebook", color: "hover:bg-blue-600", followers: "12.5K" },
-                                        { icon: <Twitter className="w-6 h-6" />, name: "Twitter", color: "hover:bg-sky-500", followers: "8.9K" },
-                                        { icon: <Instagram className="w-6 h-6" />, name: "Instagram", color: "hover:bg-pink-600", followers: "15.2K" },
-                                        { icon: <Youtube className="w-6 h-6" />, name: "YouTube", color: "hover:bg-red-600", followers: "6.7K" }
-                                    ].map((social, index) => (
-                                        <button
-                                            key={index}
-                                            className={`bg-gray-100 ${social.color} text-gray-700 hover:text-white p-4 rounded-xl transition-all duration-300 transform hover:scale-105`}
-                                        >
-                                            <div className="flex flex-col items-center gap-2">
-                                                {social.icon}
-                                                <span className="font-semibold">{social.name}</span>
-                                                <span className="text-sm opacity-75">{social.followers}</span>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </FadeInUp>
-                    </div>
-                </div>
-            </div>
-        </ErrorBoundary>
-    );
-
-    // Footer Component
-    const Footer = () => (
-        <footer className="bg-gray-900 text-white py-16">
-            <div className="container mx-auto px-4">
-                <div className="grid md:grid-cols-4 gap-8 mb-12">
-                    <div>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center">
-                                <span className="font-bold text-lg">KLG</span>
-                            </div>
-                            <div>
-                                <div className="font-bold text-lg">Katsina LG</div>
-                                <div className="text-sm text-gray-400">Innovation Hub</div>
-                            </div>
-                        </div>
-                        <p className="text-gray-400 leading-relaxed">
-                            Leading Africa's digital transformation in local governance through innovation, transparency, and citizen empowerment.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="font-bold text-lg mb-4">Quick Links</h3>
-                        <ul className="space-y-3 text-gray-400">
-                            {navItems.map((item) => (
-                                <li key={item.id}>
-                                    <button
-                                        onClick={() => setCurrentPage(item.id)}
-                                        className="hover:text-green-400 transition-colors"
-                                    >
-                                        {item.label}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-bold text-lg mb-4">Services</h3>
-                        <ul className="space-y-3 text-gray-400">
-                            <li><button className="hover:text-green-400 transition-colors">Digital Certificates</button></li>
-                            <li><button className="hover:text-green-400 transition-colors">Business Registration</button></li>
-                            <li><button className="hover:text-green-400 transition-colors">Land Services</button></li>
-                            <li><button className="hover:text-green-400 transition-colors">Tax Solutions</button></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-bold text-lg mb-4">Newsletter</h3>
-                        <p className="text-gray-400 mb-4">Get updates on new programs and services</p>
-                        <div className="flex gap-2">
-                            <input
-                                type="email"
-                                placeholder="Your email"
-                                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-green-500 text-white"
-                            />
-                            <button className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors">
-                                Subscribe
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="border-t border-gray-800 pt-8">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-gray-400 text-sm">
-                            © 2024 Katsina Local Government. All rights reserved. | Built with ❤️ for our community
-                        </p>
-                        <div className="flex items-center gap-6">
-                            <button className="text-gray-400 hover:text-green-400 transition-colors text-sm">
-                                Privacy Policy
-                            </button>
-                            <button className="text-gray-400 hover:text-green-400 transition-colors text-sm">
-                                Terms of Service
-                            </button>
-                            <button className="text-gray-400 hover:text-green-400 transition-colors text-sm">
-                                Accessibility
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
-
-    // Page Router
-    const renderPage = () => {
-        const pages = {
-            home: HomePage,
-            opportunities: OpportunitiesPage,
-            services: ServicesPage,
-            media: MediaPage,
-            about: AboutPage,
-            contact: ContactPage
-        };
-
-        const PageComponent = pages[currentPage] || HomePage;
-        return <PageComponent />;
-    };
-
+function App() {
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
-            <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
-        * {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        html {
-          scroll-behavior: smooth;
-        }
-        
-        .container {
-          max-width: 1200px;
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: #f1f5f9;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #087443, #22c55e);
-          border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, #065a35, #16a34a);
-        }
-        
-        /* Enhanced animations */
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        .float-animation {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        /* Focus states for accessibility */
-        button:focus,
-        input:focus,
-        select:focus,
-        textarea:focus {
-          outline: 2px solid #087443;
-          outline-offset: 2px;
-        }
-        
-        /* Reduced motion for accessibility */
-        @media (prefers-reduced-motion: reduce) {
-          *,
-          *::before,
-          *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-        
-        /* Print styles */
-        @media print {
-          .no-print {
-            display: none !important;
-          }
-          
-          body {
-            background: white !important;
-            color: black !important;
-          }
-        }
-        
-        /* Loading animations */
-        @keyframes shimmer {
-          0% { background-position: -200px 0; }
-          100% { background-position: calc(200px + 100%) 0; }
-        }
-        
-        .shimmer {
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200px 100%;
-          animation: shimmer 1.5s infinite;
-        }
-      `}</style>
-
-            <Header />
-            <main className="min-h-screen">
-                {renderPage()}
-            </main>
-            <Footer />
-            <APIStatusIndicator />
-        </div>
+        <DataProvider>
+            <AuthProvider>
+                <Router>
+                    <Routes>
+                        {/* Main Website Routes */}
+                        <Route path="/*" element={<MainWebsite />} />
+                        
+                        {/* Admin Routes */}
+                        <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route 
+                            path="/admin/dashboard" 
+                            element={
+                                <ProtectedRoute>
+                                    <AdminDashboardPage />
+                                </ProtectedRoute>
+                            } 
+                        />
+                        <Route 
+                            path="/admin/*" 
+                            element={
+                                <ProtectedRoute>
+                                    <AdminDashboardPage />
+                                </ProtectedRoute>
+                            } 
+                        />
+                    </Routes>
+                </Router>
+            </AuthProvider>
+        </DataProvider>
     );
-};
+}
 
-export default KatsinaWebsite;
+export default App;
