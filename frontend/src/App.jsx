@@ -12,6 +12,7 @@ import BeautifulMediaPage from './pages/BeautifulMediaPage';
 // Admin Components
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import DataDebugComponent from './components/DataDebugComponent';
 
 // Beautiful About Page
 const BeautifulAboutPage = () => (
@@ -209,6 +210,7 @@ const BeautifulContactPage = () => (
                 </div>
             </div>
         </div>
+        {process.env.NODE_ENV === 'development' && <DataDebugComponent />}
     </div>
 );
 
