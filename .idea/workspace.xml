@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d2a211c9-21e2-4fee-aa5d-0f50d3b0ce03" name="Changes" comment="simplified functionality to home, media, about and contact.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +73,7 @@
       <option name="presentableId" value="Default" />
       <updated>1755167278646</updated>
       <workItem from="1755167280209" duration="3418000" />
-      <workItem from="1755171966922" duration="32445000" />
+      <workItem from="1755171966922" duration="34083000" />
     </task>
     <task id="LOCAL-00001" summary="simplified functionality to home, media, about and contact.">
       <option name="closed" value="true" />
@@ -84,7 +83,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756460020252</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="simplified functionality to home, media, about and contact.">
+      <option name="closed" value="true" />
+      <created>1756465526640</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1756465526640</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
