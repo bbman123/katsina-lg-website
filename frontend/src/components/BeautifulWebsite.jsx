@@ -109,22 +109,22 @@ const BeautifulWebsite = ({ children }) => {
 
                        {/* Admin Login Button */}
                        <div className="flex items-center gap-2">
-                           <Link 
+                           {/* <Link 
                                to="/admin/login"
                                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-lg text-sm font-medium"
                            >
                                Admin Login
-                           </Link>
+                           </Link> */}
 
                            {/* Mobile Menu Button */}
-                           <button
+                           {/* <button
                                onClick={() => setIsMenuOpen(!isMenuOpen)}
                                className={`lg:hidden p-2 rounded-lg ${
                                    isScrolled ? 'text-gray-700' : 'text-white'
                                }`}
                            >
                                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                           </button>
+                           </button> */}
                        </div>
                    </div>
 
@@ -223,10 +223,10 @@ const BeautifulWebsite = ({ children }) => {
 
                        {/* Quick Links & Contact Combined */}
                        <div>
-                           <h3 className="font-bold text-xl mb-6 text-green-100 border-b border-green-500/30 pb-2">Quick Links & Contact</h3>
+                           <h3 className="font-bold text-xl mb-6 text-green-100 border-b border-green-500/30 pb-2"> Contact</h3>
                            
                            {/* Navigation Links */}
-                           <ul className="space-y-3 mb-6">
+                           {/* <ul className="space-y-3 mb-6">
                                {navItems.map((item) => (
                                    <li key={item.id}>
                                        <Link 
@@ -238,17 +238,17 @@ const BeautifulWebsite = ({ children }) => {
                                        </Link>
                                    </li>
                                ))}
-                           </ul>
+                           </ul> */}
                            
                            {/* Contact Info */}
                            <div className="space-y-3 text-green-200 mb-6">
                                <div className="flex items-center gap-2">
                                    <Phone className="w-4 h-4" />
-                                   <span>+234 809 123 4567</span>
+                                   <span>+234 706 460 7578</span>
                                </div>
                                <div className="flex items-center gap-2">
                                    <Mail className="w-4 h-4" />
-                                   <span>info@katsinalg.gov.ng</span>
+                                   <span>info@katsinalg.kt.gov.ng</span>
                                </div>
                                <div className="flex items-center gap-2">
                                    <MapPin className="w-4 h-4" />
@@ -257,13 +257,13 @@ const BeautifulWebsite = ({ children }) => {
                            </div>
 
                            {/* Admin Access */}
-                           <Link 
+                           {/* <Link z
                                to="/admin/login"
                                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg border border-blue-500/30"
                            >
                                <Building className="w-4 h-4" />
                                Admin Dashboard
-                           </Link>
+                           </Link> */}
                        </div>
                    </div>
 
@@ -289,7 +289,7 @@ const BeautifulWebsite = ({ children }) => {
                    <div className="border-t border-green-500/30 pt-8">
                        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                            <p className="text-green-200 text-center md:text-left">
-                               © 2024 Katsina Local Government. All rights reserved. | Built with ❤️ for our community
+                               © 2025 Katsina Local Government. All rights reserved. | By SilverWeb Enterprises
                            </p>
                            <div className="flex items-center gap-6">
                                <button className="text-green-200 hover:text-white transition-colors text-sm">

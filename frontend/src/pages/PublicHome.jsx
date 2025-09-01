@@ -239,7 +239,7 @@ const KatsinaWebsite = () => {
 
           <div className="border-t border-gray-800 pt-8 text-center">
             <p className="text-gray-400">
-              © 2024 Katsina Local Government. All rights reserved.
+              © 2025 Katsina Local Government. All rights reserved.
             </p>
           </div>
         </div>
