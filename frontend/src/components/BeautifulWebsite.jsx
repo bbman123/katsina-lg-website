@@ -201,25 +201,32 @@ const BeautifulWebsite = ({ children }) => {
                            
                            {/* Social Media Links */}
                            <div className="flex items-center gap-4">
-                               <span className="text-green-200 font-semibold">Follow Us:</span>
-                               <div className="flex gap-3">
-                                   {[
-                                       { icon: <Facebook className="w-5 h-5" />, label: "Facebook" },
-                                       { icon: <Twitter className="w-5 h-5" />, label: "Twitter" },
-                                       { icon: <Instagram className="w-5 h-5" />, label: "Instagram" },
-                                       { icon: <Youtube className="w-5 h-5" />, label: "YouTube" }
-                                   ].map((social, index) => (
-                                       <button
-                                           key={index}
-                                           className="w-10 h-10 bg-green-500/20 hover:bg-green-400/30 border border-green-400/30 rounded-lg flex items-center justify-center text-green-200 hover:text-white transition-all duration-300 transform hover:scale-110"
-                                           title={social.label}
-                                       >
-                                           {social.icon}
-                                       </button>
-                                   ))}
-                               </div>
-                           </div>
-                       </div>
+                                <span className="text-green-200 font-semibold">Follow Us:</span>
+                                <div className="flex gap-3">
+                                    {[
+                                    { 
+                                        icon: <Facebook className="w-5 h-5" />, 
+                                        label: "Facebook", 
+                                        url: "https://web.facebook.com/people/Katsina-Local-Govt-Council/61575420623618/" 
+                                    },
+                                    { icon: <Twitter className="w-5 h-5" />, label: "Twitter", url: "#" },
+                                    { icon: <Instagram className="w-5 h-5" />, label: "Instagram", url: "#" },
+                                    { icon: <Youtube className="w-5 h-5" />, label: "YouTube", url: "#" }
+                                    ].map((social, index) => (
+                                    <a
+                                        key={index}
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title={social.label}
+                                        className="w-10 h-10 bg-green-500/20 hover:bg-green-400/30 border border-green-400/30 rounded-lg flex items-center justify-center text-green-200 hover:text-white transition-all duration-300 transform hover:scale-110"
+                                    >
+                                        {social.icon}
+                                    </a>
+                                    ))}
+                                </div>
+                                </div>
+                        </div>
 
                        {/* Quick Links & Contact Combined */}
                        <div>
