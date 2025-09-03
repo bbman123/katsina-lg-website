@@ -92,7 +92,7 @@ const BeautifulHomePage = () => {
            title: "Building Tomorrow's Katsina",
            subtitle: "Innovative Governance, Sustainable Development",
            description: "Leading Nigeria's most progressive local government through digital transformation, community empowerment, and sustainable development initiatives.",
-           image: "https://mail.google.com/mail/u/0?ui=2&ik=fba58fe6ed&attid=0.0.1&permmsgid=msg-f:1842287201951378690&th=19911e73068f6d02&view=fimg&fur=ip&permmsgid=msg-f:1842287201951378690&sz=s0-l75-ft&attbid=ANGjdJ-yWUorG9iqH9H9CIQGnW9ecVa-aOYhoMQM9fm0rioOsUL7WOkkofLaj5EUq_N8hhCVhoqFZHXfx6dGNwMECyz2_uampyKiMeQcqUBRAZtTJjl-4pRXm2pQqAM&disp=emb&zw",
+           image: "https://scontent.fabv2-1.fna.fbcdn.net/v/t39.30808-6/525477596_122133099572847354_5314836962217570480_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=kDnL9-NHtnIQ7kNvwE2DhEF&_nc_oc=AdmAtqD3tDAG6QTdXBNJdEs2hRSaCTZ0diB_Ub4A2ZRhVfp2wBFlfDIaRYztaSIG5tY&_nc_zt=23&_nc_ht=scontent.fabv2-1.fna&_nc_gid=aZ-Swvd4F9ejHC9Pw9e-HA&oh=00_AfYeBJUksCp72EdGIe_0NUJx1dfx9PKTU0Jhnr7UdgoVLg&oe=68BEA6C2",
            stats: { projects: 45, beneficiaries: 12500, investment: 2.4 }
        },
        {
