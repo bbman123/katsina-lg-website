@@ -119,14 +119,14 @@ const BeautifulWebsite = ({ children }) => {
                            </Link> */}
 
                            {/* Mobile Menu Button */}
-                           {/* <button
+                           { <button
                                onClick={() => setIsMenuOpen(!isMenuOpen)}
                                className={`lg:hidden p-2 rounded-lg ${
-                                   isScrolled ? 'text-gray-700' : 'text-white'
+                                   isScrolled ? 'text-gray-700' : 'text-black'
                                }`}
                            >
                                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                           </button> */}
+                           </button> }
                        </div>
                    </div>
 
