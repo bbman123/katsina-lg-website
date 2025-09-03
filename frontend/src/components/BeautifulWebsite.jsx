@@ -277,7 +277,7 @@ const BeautifulWebsite = ({ children }) => {
                    </div>
 
                    {/* Newsletter Signup */}
-                   <div className="bg-gradient-to-r from-green-500/20 to-green-600/20 backdrop-blur-sm border border-green-400/30 rounded-2xl p-8 mb-12">
+                   {/* <div className="bg-gradient-to-r from-green-500/20 to-green-600/20 backdrop-blur-sm border border-green-400/30 rounded-2xl p-8 mb-12">
                        <div className="text-center mb-6">
                            <h3 className="text-2xl font-bold text-green-100 mb-2">Stay Connected</h3>
                            <p className="text-green-200">Get the latest updates on news and community developments</p>
@@ -292,7 +292,7 @@ const BeautifulWebsite = ({ children }) => {
                                Subscribe
                            </button>
                        </div>
-                   </div>
+                   </div> */}
 
                    {/* Bottom Section */}
                    <div className="border-t border-green-500/30 pt-8">
