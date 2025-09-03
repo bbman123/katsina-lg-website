@@ -92,7 +92,7 @@ const BeautifulHomePage = () => {
            title: "Building Tomorrow's Katsina",
            subtitle: "Innovative Governance, Sustainable Development",
            description: "Leading Nigeria's most progressive local government through digital transformation, community empowerment, and sustainable development initiatives.",
-           image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=1200&h=600&fit=crop",
+           image: "https://mail.google.com/mail/u/0?ui=2&ik=fba58fe6ed&attid=0.0.1&permmsgid=msg-f:1842287201951378690&th=19911e73068f6d02&view=fimg&fur=ip&permmsgid=msg-f:1842287201951378690&sz=s0-l75-ft&attbid=ANGjdJ-yWUorG9iqH9H9CIQGnW9ecVa-aOYhoMQM9fm0rioOsUL7WOkkofLaj5EUq_N8hhCVhoqFZHXfx6dGNwMECyz2_uampyKiMeQcqUBRAZtTJjl-4pRXm2pQqAM&disp=emb&zw",
            stats: { projects: 45, beneficiaries: 12500, investment: 2.4 }
        },
        {
@@ -100,7 +100,7 @@ const BeautifulHomePage = () => {
            title: "Empowering Our Communities",
            subtitle: "Digital Innovation, Citizen-Centric Services",
            description: "Transforming local governance through modern technology and innovative solutions that put citizens at the heart of everything we do.",
-           image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=600&fit=crop",
+           image: "https://scontent.fabv3-1.fna.fbcdn.net/v/t39.30808-6/540349054_122139652874847354_2796967542883655968_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=vsIXcQSBCs0Q7kNvwGuVj0I&_nc_oc=AdkwYvTQMnY8wnRPg8Mt0Q51_f6LsNvBmJ33EB5sDLLerUzRiqTWAlanh6lsf5QWwf0&_nc_zt=23&_nc_ht=scontent.fabv3-1.fna&_nc_gid=CPzi3PulwbaFrTgxUyQIhQ&oh=00_AfZGQMA6qNOeKQE51RAGs0XqanB_4hpQAuuAgAZi0wYIeg&oe=68BE9A65",
            stats: { programs: 12, citizens: 3200, services: 850 }
        },
        {
@@ -108,7 +108,7 @@ const BeautifulHomePage = () => {
            title: "Smart Infrastructure",
            subtitle: "Modern Solutions for Growing Communities",
            description: "Revolutionary infrastructure projects including smart roads, digital connectivity, renewable energy, and modern healthcare facilities.",
-           image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop",
+           image: "https://scontent.fabv3-2.fna.fbcdn.net/v/t39.30808-6/536279840_122138815556847354_7539557798149756521_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=P1brRIPRsLMQ7kNvwGkCg0S&_nc_oc=AdnS7GolqQXrGq46TeHkzG7_EmkwY3DMk-GvrX22IWuh8NOd-Q18AwICe7zm92dIjXs&_nc_zt=23&_nc_ht=scontent.fabv3-2.fna&_nc_gid=BydJtqtvenzvdRFa66vJ_g&oh=00_Afb6g6z9DVgvqjLEq3LV8AVDsqRU17ZsKzcFOOtXLZRkVQ&oe=68BE9EFE",
            stats: { roads: 120, connections: 8500, facilities: 28 }
        }
    ];
