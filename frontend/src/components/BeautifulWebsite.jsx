@@ -56,7 +56,8 @@ const BeautifulWebsite = ({ children }) => {
            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                isScrolled
                    ? 'bg-white/95 backdrop-blur-md shadow-lg'
-                   : 'bg-gradient-to-b from-black/20 to-transparent'
+                   : 'bg-white/95 backdrop-blur-md shadow-lg'
+                //    : 'bg-gradient-to-b from-black/20 to-transparent'
            }`}>
                <div className="h-1 bg-gradient-to-r from-green-600 via-white to-green-600"></div>
 
@@ -81,7 +82,8 @@ const BeautifulWebsite = ({ children }) => {
                                    <span className="font-bold text-sm text-white">KLG</span>
                                </div>
                            </div>
-                           <div className={`${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                           {/* <div className={`${isScrolled ? 'text-gray-800' : 'text-white'}`}> */}
+                           <div className={`${isScrolled ? 'text-gray-800' : 'text-gray-800'}`}>
                                <h1 className="text-lg font-bold leading-tight">Katsina Local Government</h1>
                                <p className="text-xs opacity-80">Home of Innovation & Prosperity</p>
                            </div>
@@ -98,7 +100,7 @@ const BeautifulWebsite = ({ children }) => {
                                            ? 'bg-green-600 text-white shadow-lg'
                                            : isScrolled
                                                ? 'text-gray-700 hover:text-green-600 hover:bg-green-50'
-                                               : 'text-white hover:text-green-300 hover:bg-white/10'
+                                               : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
                                    }`}
                                >
                                    {item.icon}
