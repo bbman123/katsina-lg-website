@@ -126,7 +126,7 @@ const BeautifulHomePage = () => {
        { label: "Active Projects", value: 156, icon: <Building className="w-8 h-8" />, color: "bg-blue-500" },
        { label: "Citizens Served", value: 45200, icon: <Users className="w-8 h-8" />, color: "bg-green-500" },
        { label: "Government Programs", value: 89, icon: <Target className="w-8 h-8" />, color: "bg-purple-500" },
-       { label: "Communities", value: 67, icon: <Heart className="w-8 h-8" />, color: "bg-red-500" }
+       { label: "Communities Served", value: 67, icon: <Heart className="w-8 h-8" />, color: "bg-red-500" }
    ];
 
    return (
@@ -280,7 +280,7 @@ const BeautifulHomePage = () => {
                        <FadeInUp delay={200}>
                            <div className="relative">
                                <img
-                                   src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop"
+                                   src="https://scontent.fabv2-1.fna.fbcdn.net/v/t39.30808-6/530936019_122137626770847354_9091474544842159947_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=OQpTCd7w_a8Q7kNvwG7RgY8&_nc_oc=AdkozRvy08dTypopDrnfxp7f0Ovl9EJqAkzv-chhHJI-9c5g7HwqhWnSr1MqYBBjTTo&_nc_zt=23&_nc_ht=scontent.fabv2-1.fna&_nc_gid=rC5eUQPFEhryjOQu9bxgUg&oh=00_AfbrpBFGFe8kO2XG4Wa7018k9deZwt0Mr9jVvt0jPk6MGA&oe=68C13D4A"
                                    alt="Modern Government Building"
                                    className="rounded-2xl shadow-2xl w-full"
                                />
