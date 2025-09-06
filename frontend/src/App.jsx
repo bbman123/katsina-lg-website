@@ -125,14 +125,14 @@ const BeautifulContactPage = () => (
                         icon: "📞",
                         title: "Call Us",
                         desc: "24/7 Citizen Support Hotline",
-                        contact: "+234 809 123 4567",
+                        contact: "+234 706 460 7578",
                         color: "from-green-500 to-emerald-500"
                     },
                     {
                         icon: "✉️",
                         title: "Email Us",
                         desc: "Quick Response within 2 hours",
-                        contact: "info@katsinalg.gov.ng",
+                        contact: "info@katsinalg.kt.gov.ng",
                         color: "from-blue-500 to-cyan-500"
                     },
                     {
@@ -161,15 +161,15 @@ const BeautifulContactPage = () => (
                     <div className="space-y-4 text-lg">
                         <div className="flex justify-between">
                             <span>Monday - Friday:</span>
-                            <span className="font-semibold">8:00 AM - 6:00 PM</span>
+                            <span className="font-semibold">8:00 AM - 4:00 PM</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Saturday:</span>
-                            <span className="font-semibold">9:00 AM - 2:00 PM</span>
+                            <span className="font-semibold">Closed</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Sunday:</span>
-                            <span className="font-semibold">Emergency Only</span>
+                            <span className="font-semibold">Closed</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Online Services:</span>
