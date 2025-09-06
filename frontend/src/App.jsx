@@ -71,9 +71,9 @@ const BeautifulAboutPage = () => (
                 <div className="grid md:grid-cols-3 gap-8">
                     {[
                         { 
-                            name: "Hon. Amina Abdullahi", 
+                            name: "Hon. Isah Miqdad", 
                             position: "Executive Chairman", 
-                            image: "https://images.unsplash.com/photo-1494790108755-2616b9b9b1b8?w=300&h=400&fit=crop",
+                            image: "https://scontent.fabv3-1.fna.fbcdn.net/v/t39.30808-6/535121625_122138986790847354_7203827652972696068_n.jpg?stp=dst-jpg_s720x720_tt6&_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_ohc=RqeA92PQTRYQ7kNvwGeIyPC&_nc_oc=AdllzuRXB5mswcM8_rgqveZKwzJgRFcR5-_3gLWwdh6YaNfUHqqEsBbaeh3sNRLamA4&_nc_zt=23&_nc_ht=scontent.fabv3-1.fna&_nc_gid=t_nTdtZNVv8JehBBFvdayQ&oh=00_AfYDbHknAyN82o9lJr_lY2hF6bP_87tt-pgfKsYmvHNYgA&oe=68C29157",
                             experience: "15+ years in public service" 
                         },
                         { 
