@@ -160,7 +160,23 @@ const BeautifulContactPage = () => (
                     <h2 className="text-3xl font-bold mb-6">Office Hours</h2>
                     <div className="space-y-4 text-lg">
                         <div className="flex justify-between">
-                            <span>Monday - Friday:</span>
+                            <span>Monday:</span>
+                            <span className="font-semibold">8:00 AM - 4:00 PM</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Tuesday:</span>
+                            <span className="font-semibold">8:00 AM - 4:00 PM</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Wednesday :</span>
+                            <span className="font-semibold">8:00 AM - 4:00 PM</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Thursday :</span>
+                            <span className="font-semibold">8:00 AM - 4:00 PM</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Friday :</span>
                             <span className="font-semibold">8:00 AM - 4:00 PM</span>
                         </div>
                         <div className="flex justify-between">
@@ -171,10 +187,10 @@ const BeautifulContactPage = () => (
                             <span>Sunday:</span>
                             <span className="font-semibold">Closed</span>
                         </div>
-                        <div className="flex justify-between">
+                        {/* <div className="flex justify-between">
                             <span>Online Services:</span>
                             <span className="font-semibold">24/7 Available</span>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
