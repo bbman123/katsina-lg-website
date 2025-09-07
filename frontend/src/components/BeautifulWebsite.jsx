@@ -298,7 +298,7 @@ const BeautifulWebsite = ({ children }) => {
                    <div className="border-t border-green-500/30 pt-8">
                        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                            <p className="text-green-200 text-center md:text-left">
-                               © 2025 Katsina Local Government. All rights reserved. | By SilverWeb Enterprises
+                               © {new Date().getFullYear()}  Katsina Local Government. All rights reserved. | By SilverWeb Enterprises
                            </p>
                            <div className="flex items-center gap-6">
                                <button className="text-green-200 hover:text-white transition-colors text-sm">

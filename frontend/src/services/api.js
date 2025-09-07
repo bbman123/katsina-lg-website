@@ -28,8 +28,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      if (window.location.pathname.startsWith('/admin')) {
-        window.location.href = '/admin/login';
+      if (window.location.pathname.startsWith('/ktlgmaster')) {
+        window.location.href = '/ktlgmaster/login';
       }
     }
     return Promise.reject(error);

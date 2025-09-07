@@ -19,7 +19,7 @@ const AdminDashboardPage = () => {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to="/admin/login" replace />;
+        return <Navigate to="/ktlgmaster/login" replace />;
     }
 
     return <AdminDashboard />;

@@ -242,7 +242,7 @@ const MainWebsite = () => {
             <Routes>
                 <Route path="/" element={<BeautifulHomePage />} />
                 <Route path="/media" element={<BeautifulHomePage />} />
-                <Route path="/media" element={<BeautifulMediaPage />} />
+                {/* <Route path="/media" element={<BeautifulMediaPage />} /> */}
                 <Route path="/about" element={<BeautifulAboutPage />} />
                 <Route path="/contact" element={<BeautifulContactPage />} />
             </Routes>
@@ -261,9 +261,9 @@ function App() {
                         <Route path="/*" element={<MainWebsite />} />
                         
                         {/* Admin Routes */}
-                        <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route path="/ktlgmaster/login" element={<AdminLogin />} />
                         <Route 
-                            path="/admin/dashboard" 
+                            path="/ktlgmaster/dashboard" 
                             element={
                                 <ProtectedRoute>
                                     <AdminDashboardPage />
@@ -271,7 +271,7 @@ function App() {
                             } 
                         />
                         <Route 
-                            path="/admin/*" 
+                            path="/ktlgmaster/*" 
                             element={
                                 <ProtectedRoute>
                                     <AdminDashboardPage />

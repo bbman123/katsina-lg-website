@@ -8,10 +8,10 @@ const AdminLogin = () => {
     const { isAuthenticated } = useAuth();
 
     if (isAuthenticated) {
-        return <Navigate to="/admin/dashboard" replace />;
+        return <Navigate to="/ktlgmaster/dashboard" replace />;
     }
 
-    return <LoginForm onSuccess={() => window.location.href = '/admin/dashboard'} />;
+    return <LoginForm onSuccess={() => window.location.href = '/ktlgmaster/dashboard'} />;
 };
 
 export default AdminLogin;

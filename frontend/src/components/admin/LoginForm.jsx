@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const LoginForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
-    email: 'admin@katsinalg.gov.ng',
+    email: 'admin@katsinalg.kt.gov.ng',
     password: 'admin123456'
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -130,19 +130,19 @@ const LoginForm = ({ onSuccess }) => {
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-gray-50 rounded-xl">
+          {/* <div className="mt-8 p-4 bg-gray-50 rounded-xl">
             <h4 className="font-semibold text-gray-800 mb-2">Demo Credentials:</h4>
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>Email:</strong> admin@katsinalg.gov.ng</p>
               <p><strong>Password:</strong> admin123456</p>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Footer */}
         <div className="text-center mt-6">
           <p className="text-white/80 text-sm">
-            © 2024 Katsina Local Government. All rights reserved.
+            © {new Date().getFullYear()}  Katsina Local Government. All rights reserved.
           </p>
         </div>
       </div>

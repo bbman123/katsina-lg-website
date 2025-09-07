@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children }) => {
         );
     }
 
-    return isAuthenticated ? children : <Navigate to="/admin/login" replace />;
+    return isAuthenticated ? children : <Navigate to="/ktlgmaster/login" replace />;
 };
 
 export default ProtectedRoute;
