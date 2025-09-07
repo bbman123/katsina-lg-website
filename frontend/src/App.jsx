@@ -14,6 +14,10 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import DataDebugComponent from './components/DataDebugComponent';
 
+// ScrollToTop
+import ScrollToTop from './components/ScrollToTop';
+
+
 // Beautiful About Page
 const BeautifulAboutPage = () => (
     <div className="py-20">
@@ -234,8 +238,10 @@ const BeautifulContactPage = () => (
 const MainWebsite = () => {
     return (
         <BeautifulWebsite>
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<BeautifulHomePage />} />
+                <Route path="/media" element={<BeautifulHomePage />} />
                 <Route path="/media" element={<BeautifulMediaPage />} />
                 <Route path="/about" element={<BeautifulAboutPage />} />
                 <Route path="/contact" element={<BeautifulContactPage />} />
