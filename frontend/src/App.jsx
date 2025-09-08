@@ -81,9 +81,9 @@ const BeautifulAboutPage = () => (
                             experience: "15+ years in public service" 
                         },
                         { 
-                            name: "Dr. Ibrahim Hassan", 
+                            name: "AD Saude Batagarawa", 
                             position: "Secretary", 
-                            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop",
+                            image: "https://scontent.fabv3-2.fna.fbcdn.net/v/t39.30808-6/465108236_9126831710662226_1210523339610731566_n.jpg?stp=dst-jpg_p526x395_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=E5T8TgCZZa8Q7kNvwFsNbpy&_nc_oc=AdnkwdlnuURXZB_H7asIx_7enlWuAwcST6Dk_q2AzPyBLL-59QQGqHRUiIvmgw7u8qE&_nc_zt=23&_nc_ht=scontent.fabv3-2.fna&_nc_gid=C94qvgw97ouwewrWAMwWSQ&oh=00_AfYxcAHEqR2LvnJnPA9PtmCgruQ0KX_ENipkfJ2EGYu7KQ&oe=68C4F5B8",
                             experience: "PhD in Public Administration" 
                         },
                         { 
