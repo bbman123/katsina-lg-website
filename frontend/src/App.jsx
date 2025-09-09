@@ -77,20 +77,20 @@ const BeautifulAboutPage = () => (
                         { 
                             name: "Hon. Isah Miqdad", 
                             position: "Executive Chairman", 
-                            image: "https://scontent.fabv3-1.fna.fbcdn.net/v/t39.30808-6/535121625_122138986790847354_7203827652972696068_n.jpg?stp=dst-jpg_s720x720_tt6&_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_ohc=RqeA92PQTRYQ7kNvwGeIyPC&_nc_oc=AdllzuRXB5mswcM8_rgqveZKwzJgRFcR5-_3gLWwdh6YaNfUHqqEsBbaeh3sNRLamA4&_nc_zt=23&_nc_ht=scontent.fabv3-1.fna&_nc_gid=t_nTdtZNVv8JehBBFvdayQ&oh=00_AfYDbHknAyN82o9lJr_lY2hF6bP_87tt-pgfKsYmvHNYgA&oe=68C29157",
-                            experience: "15+ years in public service" 
+                            image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757415023/Isah_Miqdad_qwwbpm.png",
+                            experience: "" 
                         },
                         { 
-                            name: "AD Saude Batagarawa", 
+                            name: "Hon. Abdulkarim Al'Ameen Modibbo", 
                             position: "Secretary", 
-                            image: "https://scontent.fabv3-2.fna.fbcdn.net/v/t39.30808-6/465108236_9126831710662226_1210523339610731566_n.jpg?stp=dst-jpg_p526x395_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=E5T8TgCZZa8Q7kNvwFsNbpy&_nc_oc=AdnkwdlnuURXZB_H7asIx_7enlWuAwcST6Dk_q2AzPyBLL-59QQGqHRUiIvmgw7u8qE&_nc_zt=23&_nc_ht=scontent.fabv3-2.fna&_nc_gid=C94qvgw97ouwewrWAMwWSQ&oh=00_AfYxcAHEqR2LvnJnPA9PtmCgruQ0KX_ENipkfJ2EGYu7KQ&oe=68C4F5B8",
-                            experience: "PhD in Public Administration" 
+                            image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757415130/sec_wg14nx.jpg",
+                            experience: "" 
                         },
                         { 
-                            name: "Engr. Fatima Usman", 
-                            position: "Head of Digital Innovation", 
-                            image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=400&fit=crop",
-                            experience: "Tech entrepreneur & innovator" 
+                            name: "Hon. Ishaq Tasi'u Modoji", 
+                            position: "Leader", 
+                            image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757415131/leader_hjhzfl.jpg",
+                            experience: "" 
                         }
                     ].map((leader, index) => (
                         <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
