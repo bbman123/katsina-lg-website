@@ -92,7 +92,7 @@ const BeautifulHomePage = () => {
            title: "Building Tomorrow's Katsina",
            subtitle: "Innovative Governance, Sustainable Development",
            description: "Leading Nigeria's most progressive local government through digital transformation, community empowerment, and sustainable development initiatives.",
-           image: "https://scontent.fabv2-1.fna.fbcdn.net/v/t39.30808-6/525477596_122133099572847354_5314836962217570480_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=kDnL9-NHtnIQ7kNvwE2DhEF&_nc_oc=AdmAtqD3tDAG6QTdXBNJdEs2hRSaCTZ0diB_Ub4A2ZRhVfp2wBFlfDIaRYztaSIG5tY&_nc_zt=23&_nc_ht=scontent.fabv2-1.fna&_nc_gid=aZ-Swvd4F9ejHC9Pw9e-HA&oh=00_AfYeBJUksCp72EdGIe_0NUJx1dfx9PKTU0Jhnr7UdgoVLg&oe=68BEA6C2",
+           image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757416784/building_bh5djq.jpg",
            stats: { projects: 45, beneficiaries: 12500, investment: 2.4 }
        },
        {
@@ -100,7 +100,7 @@ const BeautifulHomePage = () => {
            title: "Empowering Our Communities",
            subtitle: "Digital Innovation, Citizen-Centric Services",
            description: "Transforming local governance through modern technology and innovative solutions that put citizens at the heart of everything we do.",
-           image: "https://scontent.fabv3-1.fna.fbcdn.net/v/t39.30808-6/540349054_122139652874847354_2796967542883655968_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=vsIXcQSBCs0Q7kNvwGuVj0I&_nc_oc=AdkwYvTQMnY8wnRPg8Mt0Q51_f6LsNvBmJ33EB5sDLLerUzRiqTWAlanh6lsf5QWwf0&_nc_zt=23&_nc_ht=scontent.fabv3-1.fna&_nc_gid=CPzi3PulwbaFrTgxUyQIhQ&oh=00_AfZGQMA6qNOeKQE51RAGs0XqanB_4hpQAuuAgAZi0wYIeg&oe=68BE9A65",
+           image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757416784/empowering_sot9mv.jpg",
            stats: { programs: 12, citizens: 3200, services: 850 }
        },
        {
@@ -108,7 +108,7 @@ const BeautifulHomePage = () => {
            title: "Smart Infrastructure",
            subtitle: "Modern Solutions for Growing Communities",
            description: "Revolutionary infrastructure projects including smart roads, digital connectivity, renewable energy, and modern healthcare facilities.",
-           image: "https://scontent.fabv3-2.fna.fbcdn.net/v/t39.30808-6/536279840_122138815556847354_7539557798149756521_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=P1brRIPRsLMQ7kNvwGkCg0S&_nc_oc=AdnS7GolqQXrGq46TeHkzG7_EmkwY3DMk-GvrX22IWuh8NOd-Q18AwICe7zm92dIjXs&_nc_zt=23&_nc_ht=scontent.fabv3-2.fna&_nc_gid=BydJtqtvenzvdRFa66vJ_g&oh=00_Afb6g6z9DVgvqjLEq3LV8AVDsqRU17ZsKzcFOOtXLZRkVQ&oe=68BE9EFE",
+           image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757416785/Infrastructure_yrlw5s.jpg",
            stats: { roads: 120, connections: 8500, facilities: 28 }
        }
    ];
@@ -280,7 +280,7 @@ const BeautifulHomePage = () => {
                        <FadeInUp delay={200}>
                            <div className="relative">
                                <img
-                                   src="https://scontent.fabv2-1.fna.fbcdn.net/v/t39.30808-6/530936019_122137626770847354_9091474544842159947_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=OQpTCd7w_a8Q7kNvwG7RgY8&_nc_oc=AdkozRvy08dTypopDrnfxp7f0Ovl9EJqAkzv-chhHJI-9c5g7HwqhWnSr1MqYBBjTTo&_nc_zt=23&_nc_ht=scontent.fabv2-1.fna&_nc_gid=rC5eUQPFEhryjOQu9bxgUg&oh=00_AfbrpBFGFe8kO2XG4Wa7018k9deZwt0Mr9jVvt0jPk6MGA&oe=68C13D4A"
+                                   src="https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757415986/leadership_cjw74v.jpg"
                                    alt="Modern Government Building"
                                    className="rounded-2xl shadow-2xl w-full"
                                />
@@ -308,22 +308,22 @@ const BeautifulHomePage = () => {
                    <div className="grid md:grid-cols-3 gap-8">
                        {[
                             {
-                                title: "Smart City Initiative Launch",
-                                image: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=400&h=250&fit=crop",
-                                date: "November 10, 2024",
-                                excerpt: "Revolutionary digital transformation project launches across Katsina LG"
+                                title: "KATSINA LG CHAIRMAN ENGAGES SOCIAL MEDIA INFLUENCERS TO STRENGTHEN YOUTH SUPPORT FOR APC GOVERNMENT",
+                                image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757417267/apc_tkpfai.jpg",
+                                date: "September 8, 2025",
+                                excerpt: "The Executive Chairman of Katsina Local Government, Hon. Isah Miqdad AD Saude, has hosted an interactive forum with social media influencers and APC youth supporters across the local government. The meeting, held on Sunday, 7th September 2025, at the Local Government Secretariat conference hall, aimed at fostering unity, strengthening political engagement, and deepening youth participation in governance. The forum was well attended by prominent political figures, including former aides to the immediate past Governor of Katsina State, Rt. Hon. Aminu Bello Masari, Hon. Tanimu Sada Sa’ad, Hon. Khalil Aminu, and Hon. Abdulkarim AK Ibrahim. Others in attendance were the Special Assistant on Protocol to the Senior Special Assistant to the President of Nigeria, Bola Ahmad Tinubu, Hon. Umar Ahmad Zayyad; the Liaison Officer of Katsina Local Government, Hon. A. Hafiz; along with  other stakeholders. In his keynote address, Hon. Isah Miqdad AD Saude commended the efforts of youths who actively promote the achievements of the APC-led administration on social media platforms. He assured them of his commitment to creating stronger links between them and relevant stakeholders, to provide greater opportunities for youth empowerment and community development. The Chairman further encouraged the youths to remain steadfast in supporting the Executive Governor of Katsina State, Malam Dikko Umar Radda, PhD, CON, particularly as opposition parties intensify preparations ahead of the forthcoming elections. Zaharaddeen Muazu Rafindadi Press Secretary to Katsina LGC"
                             },
                             {
-                                title: "New Healthcare CentersNew Healthcare CentersNew Healthcare CentersNew Healthcare CentersNew Healthcare CentersNew Healthcare Centers",
-                                image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=250&fit=crop",
-                                date: "November 8, 2024",
-                                excerpt: "Modern healthcare facilities"
+                                title: "UNITY IN PRAYER: KATSINA LG CHAIRMAN HOSTS DARIKA AND IZALA SCHOLARS FOR PEACE PRAYER IN THE STATE",
+                                image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757417329/prayer_juykpj.jpg",
+                                date: "September 7, 2025",
+                                excerpt: "Katsina Local Government Chairman, Hon. Isah Miqdad AD Saude, on Sunday, 7th September 2025, convened and led a special prayer session with prominent Islamic scholars from the Darika and Izala groups at the Local Government Secretariat Mosque. The gathering was organized to seek divine intervention for peace, security, and stability in Katsina State. In his opening address, Hon. Saude expressed deep appreciation to the scholars for honoring the invitation despite the short notice. He stressed that the central purpose of the event was to unite the religious community in collective prayers for an end to the security challenges confronting the state. He further explained that the initiative followed the directive of the Executive Governor of Katsina State, Malam Dikko Umaru Radda, who called for collaboration between clerics from both Darika and Izala traditions to offer special prayers for peace and harmony across the state. Special Advisers to the Governor on Darika and Izala Affairs, Malam Muhammad Mahi Bello and Hon. Gambo Agaji, respectively, also delivered goodwill messages, underscoring the critical role of prayers in the pursuit of peace, stability, and community resilience. The prayer session commenced with Khalifa Sheikh Malam Tijjani of Shehu Jafaru Zawiyya leading the supplications, joined by Khalifa Malam Abbati Rafindadi, Sheikh Malam Abba Bala Gambawara, and other clerics representing diverse religious groups. Each offered prayers beseeching Allah to bless Katsina with lasting peace and prosperity. The event drew wide attendance, including the Chairman of the Katsina Local Government Legislative Council, Hon. Ishaq Tas’iu Modoji, councillors of the local government, the representative of the Emir of Katsina at Shinkafi, the representative of Magajin Gari Katsina and Wakilin Kudu, Alhaji Abdu Illiyasu, as well as leaders of zawiyyas, Izala scholars, and other dignitaries. The session concluded with a closing prayer led by the Chief Imam of Katsina Central Mosque, Malam Mustapha Gambo, who prayed for peace, unity, and sustainable development in Katsina State. Zaharaddeen Muazu Rafindadi Press Secretary to Katsina LGC "
                             },
                             {
-                                title: "Community Development Success",
-                                image: "https://images.unsplash.com/photo-1594736797933-d0d8aa882da5?w=400&h=250&fit=crop",
-                                date: "November 5, 2024",
-                                excerpt: "Local cooperatives report significant growth and impact"
+                                title: "KATSINA LOCAL GOVERNMENT COUNCIL CHAIRMAN HON. ISAH MIQDAD AD SAUDE PARTICIPATES IN EXCLUSIVE NTA KATSINA TELEVISION PROGRAM",
+                                image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757417329/nta_hbaip9.jpg",
+                                date: "September 3, 2025",
+                                excerpt: "Katsina Local Government Council Chairman, Hon. Isah Miqdad AD Saude, in a group photograph with the management and members of staff of the Nigerian Television Authority (NTA) Katsina, shortly after an exclusive and insightful live program where he spent an hour highlighting the achievements of His Excellency, Governor Mal. Dikko Umar Radda, PhD, CON. During the live session, Hon. Miqdad spoke extensively on education, including the foreign scholarship scheme initiated to support children of the poor, health and its ongoing infrastructure development with special reference to the General Amadi Rimi Orthopedic Hospital where the Governor is establishing a modern imaging center, as well as security and the sustained efforts being made to safeguard communities. The interview was engaging and informative, and he later granted a short follow-up interview after the live session, further emphasizing the importance of collective support in sustaining the progress being recorded across the state. Zaharaddeen Muazu Rafindadi Press Secretary to Katsina LGC "
                             }
                             ].map((news, index) => (
                             <FadeInUp key={index} delay={index * 200}>
