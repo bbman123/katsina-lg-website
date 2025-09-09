@@ -307,47 +307,51 @@ const BeautifulHomePage = () => {
 
                    <div className="grid md:grid-cols-3 gap-8">
                        {[
-                           {
-                               title: "Smart City Initiative Launch",
-                               image: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=400&h=250&fit=crop",
-                               date: "November 10, 2024",
-                               excerpt: "Revolutionary digital transformation project launches across Katsina LG"
-                           },
-                           {
-                               title: "New Healthcare Centers",
-                               image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=250&fit=crop",
-                               date: "November 8, 2024",
-                               excerpt: "Modern healthcare facilities now serving 12 communities"
-                           },
-                           {
-                               title: "Community Development Success",
-                               image: "https://images.unsplash.com/photo-1594736797933-d0d8aa882da5?w=400&h=250&fit=crop",
-                               date: "November 5, 2024",
-                               excerpt: "Local cooperatives report significant growth and impact"
-                           }
-                       ].map((news, index) => (
-                           <FadeInUp key={index} delay={index * 200}>
-                               <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                   <img
-                                       src={news.image}
-                                       alt={news.title}
-                                       className="w-full h-48 object-cover"
-                                   />
-                                   <div className="p-6">
-                                       <div className="text-sm text-green-600 font-medium mb-2">{news.date}</div>
-                                       <h3 className="text-xl font-bold text-gray-800 mb-3">{news.title}</h3>
-                                       <p className="text-gray-600 mb-4">{news.excerpt}</p>
-                                       <Link
-                                           to="/media"
-                                           className="text-green-600 hover:text-green-700 font-semibold inline-flex items-center gap-1"
-                                       >
-                                           Read More
-                                           <ArrowRight className="w-4 h-4" />
-                                       </Link>
-                                   </div>
-                               </div>
-                           </FadeInUp>
-                       ))}
+                            {
+                                title: "Smart City Initiative Launch",
+                                image: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=400&h=250&fit=crop",
+                                date: "November 10, 2024",
+                                excerpt: "Revolutionary digital transformation project launches across Katsina LG"
+                            },
+                            {
+                                title: "New Healthcare CentersNew Healthcare CentersNew Healthcare CentersNew Healthcare CentersNew Healthcare CentersNew Healthcare Centers",
+                                image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=250&fit=crop",
+                                date: "November 8, 2024",
+                                excerpt: "Modern healthcare facilities"
+                            },
+                            {
+                                title: "Community Development Success",
+                                image: "https://images.unsplash.com/photo-1594736797933-d0d8aa882da5?w=400&h=250&fit=crop",
+                                date: "November 5, 2024",
+                                excerpt: "Local cooperatives report significant growth and impact"
+                            }
+                            ].map((news, index) => (
+                            <FadeInUp key={index} delay={index * 200}>
+                                <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
+                                <img
+                                    src={news.image}
+                                    alt={news.title}
+                                    className="w-full h-48 object-cover"
+                                />
+                                <div className="p-6 flex-1 flex flex-col">
+                                    <div className="text-sm text-green-600 font-medium mb-2">{news.date}</div>
+                                    <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
+                                    {news.title}
+                                    </h3>
+                                    <p className="text-gray-600 mb-4 flex-1 line-clamp-3">
+                                    {news.excerpt}
+                                    </p>
+                                    <Link
+                                    to="/media"
+                                    className="text-green-600 hover:text-green-700 font-semibold inline-flex items-center gap-1"
+                                    >
+                                    Read More
+                                    <ArrowRight className="w-4 h-4" />
+                                    </Link>
+                                </div>
+                                </div>
+                            </FadeInUp>
+                            ))}
                    </div>
 
                    <FadeInUp delay={600}>
