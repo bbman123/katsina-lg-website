@@ -61,7 +61,7 @@ const createAdmin = async () => {
         console.log('┌─────────────────────────────────────┐');
         console.log('│           LOGIN CREDENTIALS         │');
         console.log('├─────────────────────────────────────┤');
-        console.log('│ Email:    admin@katsinalg.kt.gov.ng    │');
+        console.log('│ Email:    admin@katsinalg.kt.gov.ng │');
         console.log('│ Password: admin123456               │');
         console.log('│ Role:     admin                     │');
         console.log('└─────────────────────────────────────┘');
