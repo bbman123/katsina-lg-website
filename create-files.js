@@ -1,5 +1,3 @@
-cat > create-files.js << 'EOF'
-#!/usr/bin/env node
 
 const fs = require('fs');
 const path = require('path');
@@ -67,7 +65,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
   console.log(\`🚀 Server running on port \${PORT}\`);
@@ -608,7 +606,7 @@ export default function PublicHome() {
 
   useEffect(() => {
     // Fetch opportunities from API
-    fetch('http://localhost:5000/api/public-data')
+    fetch('http://localhost:5001/api/public-data')
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -705,4 +703,3 @@ console.log('2. cp backend/.env.example backend/.env && cp frontend/.env.example
 console.log('3. Update backend/.env with your MongoDB and Cloudinary credentials');
 console.log('4. npm run create-admin');
 console.log('5. npm run dev');
-EOF

@@ -1,22 +1,30 @@
-
-  {
+{
     "name": "katsina-lg-project",
     "version": "1.0.0",
     "description": "Katsina Local Government Complete Web Platform",
     "scripts": {
-      "setup": "node setup.js && node create-files.js",
-      "install-backend": "cd backend && npm install",
-      "install-frontend": "cd frontend && npm install",
-      "install-all": "npm run install-backend && npm run install-frontend",
-      "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
-      "build": "cd frontend && npm run build",
-      "start": "cd backend && npm start",
-      "create-admin": "cd backend && node scripts/createAdmin.js"
+        "setup": "node setup.js && node create-files.js",
+        "install-backend": "cd backend && npm install",
+        "install-frontend": "cd frontend && npm install",
+        "install-all": "npm run install-backend && npm run install-frontend",
+        "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+        "build": "cd frontend && npm run build",
+        "start": "cd backend && npm start",
+        "create-admin": "cd backend && node scripts/createAdmin.js"
     },
-    "keywords": ["government", "local-government", "nigeria", "react", "node"],
+    "keywords": [
+        "government",
+        "local-government",
+        "nigeria",
+        "react",
+        "node"
+    ],
     "author": "Katsina LG Team",
     "license": "MIT",
     "devDependencies": {
-      "concurrently": "^8.2.0"
+        "concurrently": "^8.2.0"
+    },
+    "dependencies": {
+        "cors": "^2.8.5"
     }
-  }
+}

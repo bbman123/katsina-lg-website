@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d2a211c9-21e2-4fee-aa5d-0f50d3b0ce03" name="Changes" comment="simplified functionality to home, media, about and contact.">
+    <list default="true" id="d2a211c9-21e2-4fee-aa5d-0f50d3b0ce03" name="Changes" comment="add package-lock.json and node_modules to .gitignore">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create-files.js" beforeDir="false" afterPath="$PROJECT_DIR$/create-files.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/setup.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +59,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/frontend/src/components" />
       <recent name="$PROJECT_DIR$/frontend/public/images" />
@@ -74,6 +83,7 @@
       <updated>1755167278646</updated>
       <workItem from="1755167280209" duration="3418000" />
       <workItem from="1755171966922" duration="34083000" />
+      <workItem from="1758491357807" duration="335000" />
     </task>
     <task id="LOCAL-00001" summary="simplified functionality to home, media, about and contact.">
       <option name="closed" value="true" />
@@ -91,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756465526640</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add package-lock.json and node_modules to .gitignore">
+      <option name="closed" value="true" />
+      <created>1758487316551</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1758487316551</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,7 +128,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="simplified functionality to home, media, about and contact." />
-    <option name="LAST_COMMIT_MESSAGE" value="simplified functionality to home, media, about and contact." />
+    <MESSAGE value="add package-lock.json and node_modules to .gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="add package-lock.json and node_modules to .gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

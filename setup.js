@@ -1,5 +1,3 @@
-cat > setup.js << 'EOF'
-#!/usr/bin/env node
 
 const fs = require('fs');
 const path = require('path');
@@ -106,7 +104,7 @@ fs.writeFileSync('frontend/package.json', JSON.stringify(frontendPackage, null, 
 
 // Create .env.example files
 const backendEnv = `# Server Configuration
-PORT=5000
+PORT=5001
 NODE_ENV=development
 
 # Database
@@ -126,7 +124,7 @@ CLOUDINARY_API_SECRET=your-api-secret
 # Frontend URL
 CLIENT_URL=http://localhost:3000`;
 
-const frontendEnv = `VITE_API_BASE_URL=http://localhost:5000/api
+const frontendEnv = `VITE_API_BASE_URL=http://localhost:5001/api
 VITE_POLL_INTERVAL_MS=8000
 VITE_APP_NAME=Katsina Local Government`;
 
@@ -157,4 +155,3 @@ console.log('2. Run: npm run install-all');
 console.log('3. Copy environment files and update credentials');
 console.log('4. Run: npm run create-admin');
 console.log('5. Run: npm run dev');
-EOF
