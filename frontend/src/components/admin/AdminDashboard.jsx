@@ -419,15 +419,34 @@ const AdminDashboard = () => {
         <div className="h-1 bg-gradient-to-r from-green-600 via-white to-green-600"></div>
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">KLG</span>
+            {/* Logo Container */}
+            <div className="w-12 h-12 bg-gradient-to-br rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+              <img
+                src="/images/katsina-logo.png" 
+                alt="KLG"
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  // If image fails to load, hide img and show text fallback
+                  e.currentTarget.style.display = 'none';
+                  const fallback = e.currentTarget.parentElement?.querySelector('.fallback-text');
+                  if (fallback) fallback.style.display = 'inline-flex';
+                }}
+              />
+              {/* Fallback Text (hidden by default) */}
+              <span
+                className="text-white font-bold text-lg fallback-text"
+                style={{ display: 'none' }}
+              >
+                KLG
+              </span>
             </div>
+
+            {/* Title & Subtitle */}
             <div>
               <h1 className="text-xl font-bold text-gray-800">Katsina LG Admin</h1>
               <p className="text-sm text-gray-600">Content Management System</p>
             </div>
-          </div>
-          
+          </div>          
           <div className="flex items-center gap-4">
             <button 
               onClick={() => window.open('/', '_blank')}

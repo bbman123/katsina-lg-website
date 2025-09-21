@@ -4,8 +4,8 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const LoginForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
-    email: 'admin@katsinalg.kt.gov.ng',
-    password: 'admin123456'
+    // email: 'admin@katsinalg.kt.gov.ng',
+    // password: 'admin123456'
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,16 +46,28 @@ const LoginForm = ({ onSuccess }) => {
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6">
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-              <Shield className="w-10 h-10 text-green-600" />
+              {/* Logo Image */}
+              <img
+                src="/images/katsina-logo.png" 
+                alt="Katsina LG Logo"
+                className="w-10 h-10 object-contain"
+                onError={(e) => {
+                  e.currentTarget.classList.add('hidden'); // Hide image
+                  e.currentTarget.nextSibling?.classList.remove('hidden'); // Show fallback
+                }}
+              />
+              {/* Fallback Icon (Hidden by Default) */}
+              <Shield
+                className="w-10 h-10 text-green-600 hidden" // 👈 Starts hidden
+              />
             </div>
             <div className="text-white text-left">
               <h1 className="text-2xl font-bold">Admin Portal</h1>
               <p className="text-green-200">Katsina Local Government</p>
             </div>
           </div>
-        </div>
-
-        {/* Login Form */}
+        </div> 
+       {/* Login Form */}
         <div className="bg-white rounded-3xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>

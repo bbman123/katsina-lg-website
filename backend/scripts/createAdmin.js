@@ -28,11 +28,11 @@ const createAdmin = async () => {
         console.log('✅ Connected to MongoDB');
 
         // Check if admin already exists
-        const adminExists = await User.findOne({ email: 'admin@katsinalg.gov.ng' });
+        const adminExists = await User.findOne({ email: 'admin@katsinalg.kt.gov.ng' });
 
         if (adminExists) {
             console.log('❌ Admin user already exists!');
-            console.log('📧 Email: admin@katsinalg.gov.ng');
+            console.log('📧 Email: admin@katsinalg.kt.gov.ng');
 
             // Show existing user info
             console.log('👤 Existing user details:');
@@ -52,7 +52,7 @@ const createAdmin = async () => {
         console.log('👤 Creating admin user...');
         const admin = await User.create({
             name: 'System Administrator',
-            email: 'admin@katsinalg.gov.ng',
+            email: 'admin@katsinalg.kt.gov.ng',
             password: 'admin123456',
             role: 'admin'
         });
@@ -61,11 +61,11 @@ const createAdmin = async () => {
         console.log('┌─────────────────────────────────────┐');
         console.log('│           LOGIN CREDENTIALS         │');
         console.log('├─────────────────────────────────────┤');
-        console.log('│ Email:    admin@katsinalg.gov.ng    │');
+        console.log('│ Email:    admin@katsinalg.kt.gov.ng    │');
         console.log('│ Password: admin123456               │');
         console.log('│ Role:     admin                     │');
         console.log('└─────────────────────────────────────┘');
-        console.log('🌐 Login URL: http://localhost:3000/admin');
+        console.log('🌐 Login URL: http://localhost:3000/ktlgmaster');
         console.log('⚠️  IMPORTANT: Change password after first login!');
 
         await mongoose.connection.close();
