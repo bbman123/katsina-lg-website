@@ -175,32 +175,32 @@ const BeautifulWebsite = ({ children }) => {
                        {/* Logo and Description */}
                        <div className="md:col-span-2">
                            <div className="flex items-center gap-4 mb-6">
-{/* Footer Logo */}
-<div className="flex items-center gap-3">
-  <div 
-    className="w-16 h-16 bg-white rounded-2xl shadow-xl border-2 border-green-300/30 flex items-center justify-center"
-  >
-    <img 
-      src="/images/katsina-logo.png" 
-      alt="Katsina Local Government Logo"
-      className="w-full h-full object-contain rounded-2xl"
-      onError={(e) => {
-        // Replace image with fallback text if needed
-        e.target.style.display = 'none';
-        const parent = e.target.parentElement;
-        const fallback = parent.querySelector('.fallback-text');
-        if (fallback) fallback.style.display = 'flex';
-      }}
-    />
-    {/* Fallback Text Inside Same Container */}
-    <div 
-      className="hidden absolute items-center justify-center w-16 h-16"
-      style={{ display: 'none' }}
-    >
-      <span className="font-bold text-2xl text-gray-800">KLG</span>
-    </div>
-  </div>
-</div>                               <div>
+                                {/* Footer Logo */}
+                                <div className="flex items-center gap-3">
+                                <div 
+                                    className="w-16 h-16 bg-white rounded-2xl shadow-xl border-2 border-green-300/30 flex items-center justify-center"
+                                >
+                                    <img 
+                                    src="/images/katsina-logo.png" 
+                                    alt="Katsina Local Government Logo"
+                                    className="w-full h-full object-contain rounded-2xl"
+                                    onError={(e) => {
+                                        // Replace image with fallback text if needed
+                                        e.target.style.display = 'none';
+                                        const parent = e.target.parentElement;
+                                        const fallback = parent.querySelector('.fallback-text');
+                                        if (fallback) fallback.style.display = 'flex';
+                                    }}
+                                    />
+                                    {/* Fallback Text Inside Same Container */}
+                                    <div 
+                                    className="hidden absolute items-center justify-center w-16 h-16"
+                                    style={{ display: 'none' }}
+                                    >
+                                    <span className="font-bold text-2xl text-gray-800">KLG</span>
+                                    </div>
+                                </div>
+                                </div>                               <div>
                                    <div className="font-bold text-2xl text-green-100">Katsina Local Government</div>
                                    <div className="text-lg text-green-200">Innovation Hub for Digital Governance</div>
                                </div>

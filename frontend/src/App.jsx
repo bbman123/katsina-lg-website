@@ -241,7 +241,7 @@ const MainWebsite = () => {
             <ScrollToTop />
             <Routes>
                 <Route path="/" element={<BeautifulHomePage />} />
-                <Route path="/media" element={<BeautifulHomePage />} />
+                <Route path="/media" element={<BeautifulMediaPage />} />
                 {/* <Route path="/media" element={<BeautifulMediaPage />} /> */}
                 <Route path="/about" element={<BeautifulAboutPage />} />
                 <Route path="/contact" element={<BeautifulContactPage />} />
