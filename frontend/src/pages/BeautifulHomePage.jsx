@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
     ArrowRight, Users, Building, Target, Heart, Globe
 } from 'lucide-react';
+// import CountUp from 'react-countup';
 
 // Animation hooks (same as before)
 const useIntersectionObserver = (delay = 0) => {
@@ -29,31 +30,38 @@ const useIntersectionObserver = (delay = 0) => {
 };
 
 const useCountUp = (end, duration = 2000) => {
-    const [count, setCount] = useState(0);
-    const [elementRef, isVisible] = useIntersectionObserver();
-    const [hasStarted, setHasStarted] = useState(false);
+  const [count, setCount] = useState(0);
+  const [elementRef, isVisible] = useIntersectionObserver();
+  const [hasStarted, setHasStarted] = useState(false);
 
-    useEffect(() => {
-        if (isVisible && !hasStarted && end > 0) {
-            setHasStarted(true);
-            let start = 0;
-            const increment = end / (duration / 16);
+  useEffect(() => {
+    if (isVisible && !hasStarted && end > 0) {
+      setHasStarted(true);
 
-            const timer = setInterval(() => {
-                start += increment;
-                if (start >= end) {
-		setCount(end);
-                   clearInterval(timer);
-               } else {
-                   setCount(Math.floor(start));
-               }
-           }, 16);
+      let start = 0;
+      const startTime = performance.now();
 
-           return () => clearInterval(timer);
-       }
-   }, [isVisible, end, duration, hasStarted]);
+      const step = (timestamp) => {
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
 
-   return [elementRef, count];
+        // Use cubic ease-out for smoother feel
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const current = easeProgress * end;
+
+        // Don't use Math.floor — preserve decimals
+        setCount(current);
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      };
+
+      requestAnimationFrame(step);
+    }
+  }, [isVisible, hasStarted, end, duration]);
+
+  return [elementRef, count];
 };
 
 const FadeInUp = ({ children, delay = 0, className = "" }) => {
@@ -73,13 +81,24 @@ const FadeInUp = ({ children, delay = 0, className = "" }) => {
    );
 };
 
-const CountUp = ({ end, duration = 2000, suffix = "" }) => {
-   const [elementRef, count] = useCountUp(end, duration);
-   return (
-       <span ref={elementRef}>
-           {count.toLocaleString()}{suffix}
-       </span>
-   );
+// Main CountUp Component
+const CountUp = ({ end, duration = 2000, suffix = "", decimals = 0 }) => {
+  const [elementRef, count] = useCountUp(end, duration);
+
+  // Format with fixed decimals, remove unnecessary trailing zeros
+  const formatted = decimals !== undefined 
+    ? parseFloat(count.toFixed(decimals))
+    : Math.round(count);
+
+  return (
+    <span ref={elementRef}>
+      {formatted.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: decimals
+      })}
+      {suffix}
+    </span>
+  );
 };
 
 const BeautifulHomePage = () => {
@@ -93,7 +112,7 @@ const BeautifulHomePage = () => {
            subtitle: "Innovative Governance, Sustainable Development",
            description: "Leading Nigeria's most progressive local government through digital transformation, community empowerment, and sustainable development initiatives.",
            image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757416784/building_bh5djq.jpg",
-           stats: { projects: 45, beneficiaries: 12500, investment: 2.4 }
+           stats: { projects: 4500, beneficiaries: 12500, investment: 245 }
        },
        {
            id: 2,
@@ -123,8 +142,8 @@ const BeautifulHomePage = () => {
 
    // Beautiful stats data
    const quickStats = [
-       { label: "Active Projects", value: 156, icon: <Building className="w-8 h-8" />, color: "bg-blue-500" },
-       { label: "Citizens Served", value: 45200, icon: <Users className="w-8 h-8" />, color: "bg-green-500" },
+       { label: "Active Projects", value: 1560, icon: <Building className="w-8 h-8" />, color: "bg-blue-500" },
+       { label: "Citizens Served", value: 4520, icon: <Users className="w-8 h-8" />, color: "bg-green-500" },
        { label: "Government Programs", value: 89, icon: <Target className="w-8 h-8" />, color: "bg-purple-500" },
        { label: "Communities Served", value: 67, icon: <Heart className="w-8 h-8" />, color: "bg-red-500" }
    ];
@@ -182,19 +201,43 @@ const BeautifulHomePage = () => {
 
                    <FadeInUp delay={800}>
                        <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto">
-                           {Object.entries(heroSlides[currentSlide].stats).map(([key, value], index) => (
-                               <div key={key} className="text-center">
-                                   <div className="text-3xl md:text-4xl font-bold text-green-300">
-                                       <CountUp end={typeof value === 'number' ? value : parseInt(value)} />
-                                       {typeof value === 'number' && value > 1000 ? 
-                                           value > 1000000 ? 'M' : value > 1000 ? 'K' : '' : 
-                                           typeof value === 'string' && value.includes('.') ? 'B' : ''}
-                                   </div>
-                                   <div className="text-sm uppercase tracking-wider opacity-80">
-                                       {key.replace(/([A-Z])/g, ' $1').trim()}
-                                   </div>
-                               </div>
-                           ))}
+                           {Object.entries(heroSlides[currentSlide].stats).map(([key, rawValue]) => {
+                                // Parse value safely
+                                const numValue = typeof rawValue === 'number' ? rawValue : parseInt(rawValue, 10) || 0;
+
+                                let displayValue = numValue;
+                                let suffix = '';
+
+                                if (numValue >= 1_000_000) {
+                                    displayValue = parseFloat((numValue / 1_000_000).toFixed(1)); // e.g., 2.5
+                                    suffix = 'M';
+                                } else if (numValue >= 1_000) {
+                                    displayValue = parseFloat((numValue / 1_000).toFixed(1)); // e.g., 4.5
+                                    suffix = 'K';
+                                }
+                                // Below 1000 → show full number (e.g., 850)
+
+                                const label = key
+                                    .replace(/([A-Z])/g, ' $1')
+                                    .trim()
+                                    .toUpperCase();
+
+                                return (
+                                    <div key={key} className="text-center">
+                                    <div className="text-3xl md:text-4xl font-bold text-green-300 flex items-baseline justify-center gap-1">
+                                        <CountUp 
+                                        end={displayValue} 
+                                        duration={2500} 
+                                        decimals={1} 
+                                        />
+                                        <span>{suffix}</span>
+                                    </div>
+                                    <div className="text-sm uppercase tracking-wider opacity-80 mt-1">
+                                        {label}
+                                    </div>
+                                    </div>
+                                );
+                                })}
                        </div>
                    </FadeInUp>
                </div>

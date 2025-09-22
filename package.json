@@ -25,6 +25,7 @@
         "concurrently": "^8.2.0"
     },
     "dependencies": {
-        "cors": "^2.8.5"
+        "cors": "^2.8.5",
+        "react-countup": "^6.5.3"
     }
 }
