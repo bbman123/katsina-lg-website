@@ -1,165 +1,314 @@
 const express = require('express');
-const multer = require('multer');
-const cloudinary = require('../config/cloudinary');
-const { auth, editorOrAdmin } = require('../middleware/auth');
-const Media = require('../models/Media');
-
 const router = express.Router();
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const Media = require('../models/Media'); // Add this import
 
-// Configure multer for file uploads
-const storage = multer.memoryStorage();
-const upload = multer({
-    storage,
-    limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB limit
-    },
-    fileFilter: (req, file, cb) => {
-        // Accept images, videos, and documents
-        if (file.mimetype.startsWith('image/') ||
-            file.mimetype.startsWith('video/') ||
-            file.mimetype === 'application/pdf' ||
-            file.mimetype.includes('document')) {
-            cb(null, true);
-        } else {
-            cb(new Error('Invalid file type'), false);
-        }
-    }
+// Add auth middleware directly here
+const auth = (req, res, next) => {
+  const authHeader = req.header('Authorization');
+  const token = authHeader && authHeader.replace('Bearer ', '');
+
+  if (!token) {
+    return res.status(401).json({ 
+      success: false, 
+      message: 'Access denied. No token provided.' 
+    });
+  }
+
+  try {
+    const jwt = require('jsonwebtoken');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ 
+      success: false, 
+      message: 'Invalid token' 
+    });
+  }
+};
+
+// Configure multer for memory storage
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 100 * 1024 * 1024 // 100MB limit
+  }
 });
 
-// @desc    Get all media
-// @route   GET /api/media
-// @access  Public
-const getMedia = async (req, res) => {
-    try {
-        const { type, status, page = 1, limit = 10 } = req.query;
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-        const query = {};
-        if (type) query.type = type;
-        if (status) query.status = status;
-
-        const media = await Media.find(query)
-            .populate('createdBy', 'name email')
-            .sort({ createdAt: -1 })
-            .limit(limit * 1)
-            .skip((page - 1) * limit);
-
-        const total = await Media.countDocuments(query);
-
-        res.json({
-            success: true,
-            count: media.length,
-            total,
-            pages: Math.ceil(total / limit),
-            currentPage: parseInt(page),
-            data: media
-        });
-    } catch (error) {
-        console.error('Get media error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            error: error.message
-        });
+// Upload new media
+router.post('/upload', auth, upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
     }
-};
 
-// @desc    Upload media
-// @route   POST /api/media
-// @access  Private (Editor/Admin)
-const uploadMedia = async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: 'Please upload a file'
-            });
-        }
-
-        const { title, description, type } = req.body;
-
-        // Upload to Cloudinary
-        const result = await new Promise((resolve, reject) => {
-            cloudinary.uploader.upload_stream(
-                {
-                    resource_type: 'auto',
-                    folder: 'katsina-lg',
-                },
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
-            ).end(req.file.buffer);
-        });
-
-        // Save to database
-        const media = await Media.create({
-            title,
-            description,
-            type: type || (req.file.mimetype.startsWith('image/') ? 'image' :
-                req.file.mimetype.startsWith('video/') ? 'video' : 'document'),
-            fileUrl: result.secure_url,
-            fileName: req.file.originalname,
-            fileSize: req.file.size,
-            cloudinaryId: result.public_id,
-            createdBy: req.user.id
-        });
-
-        await media.populate('createdBy', 'name email');
-
-        res.status(201).json({
-            success: true,
-            message: 'Media uploaded successfully',
-            data: media
-        });
-    } catch (error) {
-        console.error('Upload media error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            error: error.message
-        });
+    // Determine resource type based on file type
+    let resourceType = 'image';
+    let folder = 'media/images';
+    
+    if (req.file.mimetype.startsWith('video/')) {
+      resourceType = 'video';
+      folder = 'media/videos';
+    } else if (!req.file.mimetype.startsWith('image/')) {
+      resourceType = 'raw';
+      folder = 'media/documents';
     }
-};
 
-// @desc    Delete media
-// @route   DELETE /api/media/:id
-// @access  Private (Editor/Admin)
-const deleteMedia = async (req, res) => {
-    try {
-        const media = await Media.findById(req.params.id);
-
-        if (!media) {
-            return res.status(404).json({
-                success: false,
-                message: 'Media not found'
-            });
+    // Upload to Cloudinary
+    const uploadResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: resourceType,
+          folder: folder,
+          public_id: `${Date.now()}-${req.file.originalname.replace(/\.[^/.]+$/, "")}`,
+          transformation: resourceType === 'image' ? [
+            { quality: 'auto', fetch_format: 'auto' }
+          ] : undefined
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
         }
+      );
+      uploadStream.end(req.file.buffer);
+    });
 
-        // Delete from Cloudinary
-        if (media.cloudinaryId) {
-            await cloudinary.uploader.destroy(media.cloudinaryId);
-        }
+    // Create and save media record to MongoDB
+    const mediaItem = new Media({
+      title: req.body.title || req.file.originalname,
+      description: req.body.description || '',
+      type: req.body.type || resourceType,
+      category: req.body.category || 'General',
+      status: req.body.status || 'published',
+      featured: req.body.featured === 'true',
+      fileUrl: uploadResult.secure_url,
+      thumbnail: resourceType === 'video' 
+        ? uploadResult.thumbnail_url 
+        : uploadResult.secure_url,
+      cloudinaryId: uploadResult.public_id,
+      format: uploadResult.format,
+      size: uploadResult.bytes,
+      width: uploadResult.width,
+      height: uploadResult.height,
+      tags: req.body.category ? [req.body.category.toLowerCase()] : [],
+      uploadedBy: req.user.id // From auth middleware
+    });
 
-        // Delete from database
-        await Media.findByIdAndDelete(req.params.id);
+    // Save to MongoDB
+    const savedMedia = await mediaItem.save();
 
-        res.json({
-            success: true,
-            message: 'Media deleted successfully'
-        });
-    } catch (error) {
-        console.error('Delete media error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            error: error.message
-        });
+    res.json({
+      success: true,
+      message: 'Media uploaded successfully',
+      data: savedMedia
+    });
+
+  } catch (error) {
+    console.error('Upload error:', error);
+    
+    // If there was an error after uploading to Cloudinary, try to delete it
+    if (error.cloudinaryId) {
+      try {
+        await cloudinary.uploader.destroy(error.cloudinaryId);
+      } catch (deleteError) {
+        console.error('Failed to delete from Cloudinary:', deleteError);
+      }
     }
-};
+    
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to upload media',
+      error: error.message 
+    });
+  }
+});
 
-// Routes
-router.get('/', getMedia);
-router.post('/', auth, editorOrAdmin, upload.single('file'), uploadMedia);
-router.delete('/:id', auth, editorOrAdmin, deleteMedia);
+// Get all media items
+router.get('/', async (req, res) => {
+  try {
+    const { category, status, featured, search, limit = 50, page = 1 } = req.query;
+    
+    // Build query
+    const query = {};
+    if (category && category !== 'all') query.category = category;
+    if (status) query.status = status;
+    if (featured !== undefined) query.featured = featured === 'true';
+    
+    // If search term provided, use text search
+    if (search) {
+      query.$text = { $search: search };
+    }
+    
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+    
+    // Fetch from MongoDB
+    const media = await Media.find(query)
+      .sort({ createdAt: -1 })
+      .limit(parseInt(limit))
+      .skip(skip)
+      .populate('uploadedBy', 'name email');
+    
+    const total = await Media.countDocuments(query);
+    
+    res.json({
+      success: true,
+      data: media,
+      pagination: {
+        total,
+        page: parseInt(page),
+        pages: Math.ceil(total / limit),
+        limit: parseInt(limit)
+      }
+    });
+  } catch (error) {
+    console.error('Fetch error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to fetch media',
+      error: error.message 
+    });
+  }
+});
+
+// Get single media item
+router.get('/:id', async (req, res) => {
+  try {
+    const media = await Media.findById(req.params.id).populate('uploadedBy', 'name email');
+    
+    if (!media) {
+      return res.status(404).json({
+        success: false,
+        message: 'Media not found'
+      });
+    }
+    
+    // Increment views
+    media.views += 1;
+    await media.save();
+    
+    res.json({
+      success: true,
+      data: media
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to fetch media',
+      error: error.message 
+    });
+  }
+});
+
+// Update media item
+router.put('/:id', auth, async (req, res) => {
+  try {
+    const { title, description, category, status, featured, tags } = req.body;
+    
+    const media = await Media.findById(req.params.id);
+    
+    if (!media) {
+      return res.status(404).json({
+        success: false,
+        message: 'Media not found'
+      });
+    }
+    
+    // Update fields
+    if (title) media.title = title;
+    if (description !== undefined) media.description = description;
+    if (category) media.category = category;
+    if (status) media.status = status;
+    if (featured !== undefined) media.featured = featured;
+    if (tags) media.tags = tags;
+    
+    const updatedMedia = await media.save();
+    
+    res.json({
+      success: true,
+      message: 'Media updated successfully',
+      data: updatedMedia
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to update media',
+      error: error.message 
+    });
+  }
+});
+
+// Delete media item
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const media = await Media.findById(req.params.id);
+    
+    if (!media) {
+      return res.status(404).json({
+        success: false,
+        message: 'Media not found'
+      });
+    }
+    
+    // Delete from Cloudinary
+    try {
+      await cloudinary.uploader.destroy(media.cloudinaryId);
+    } catch (cloudinaryError) {
+      console.error('Failed to delete from Cloudinary:', cloudinaryError);
+    }
+    
+    // Delete from MongoDB
+    await media.deleteOne();
+    
+    res.json({
+      success: true,
+      message: 'Media deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to delete media',
+      error: error.message 
+    });
+  }
+});
+
+// Increment download count
+router.post('/:id/download', async (req, res) => {
+  try {
+    const media = await Media.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { downloads: 1 } },
+      { new: true }
+    );
+    
+    if (!media) {
+      return res.status(404).json({
+        success: false,
+        message: 'Media not found'
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: media
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to update download count',
+      error: error.message 
+    });
+  }
+});
 
 module.exports = router;

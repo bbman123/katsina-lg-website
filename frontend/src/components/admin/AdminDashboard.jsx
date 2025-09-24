@@ -105,7 +105,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!uploadForm.title.trim()) {
       alert('Please enter a title');
       return;
@@ -117,53 +117,70 @@ const AdminDashboard = () => {
     }
 
     try {
-      // Simulate file upload URL (in real app, this would be uploaded to server)
-      let fileUrl = selectedItem?.fileUrl;
-      let thumbnail = selectedItem?.thumbnail;
+      // For actual file upload, you should use FormData
+      if (selectedFile && !selectedItem) {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('title', uploadForm.title);
+        formData.append('description', uploadForm.description);
+        formData.append('type', uploadForm.type);
+        formData.append('category', uploadForm.category);
+        formData.append('status', uploadForm.status);
+        formData.append('featured', uploadForm.featured);
 
-      if (selectedFile) {
-        if (selectedFile.type.startsWith('image/')) {
-          fileUrl = filePreview;
-          thumbnail = filePreview;
-        } else if (selectedFile.type.startsWith('video/')) {
-          // For video, you'd typically upload to a service and get a URL
-          fileUrl = 'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=600&h=400&fit=crop'; // Placeholder
-          thumbnail = 'https://images.unsplash.com/photo-1611605698335-8b1569810432?w=600&h=400&fit=crop';
-        } else {
-          // For documents, create a document thumbnail
-          fileUrl = `/documents/${selectedFile.name}`;
-          thumbnail = 'https://images.unsplash.com/photo-1568667256549-094345857637?w=600&h=400&fit=crop';
+        // Upload using FormData to your backend
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5001/api/media/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Upload failed');
         }
-      }
 
-      const mediaData = {
-        ...uploadForm,
-        fileUrl,
-        thumbnail,
-        tags: uploadForm.category ? [uploadForm.category.toLowerCase()] : []
-      };
-
-      if (selectedItem) {
-        // Update existing item
-        updateMediaItem(selectedItem.id, mediaData);
-        alert('Media updated successfully!');
-      } else {
-        // Add new item
-        addMediaItem(mediaData);
+        const result = await response.json();
         alert('Media uploaded successfully!');
-      }
+        setShowModal(false);
+        // Refresh media items
+        window.location.reload(); // Or call a refresh function
+      } else {
+        // For updates or when no real file (using existing logic)
+        let fileUrl = selectedItem?.fileUrl;
+        let thumbnail = selectedItem?.thumbnail;
 
-      setShowModal(false);
-      setUploadForm({
-        title: '',
-        description: '',
-        type: 'image',
-        category: 'General',
-        status: 'published',
-        featured: false
-      });
-      setSelectedFile(null);
-      setFilePreview(null);
+        const mediaData = {
+          ...uploadForm,
+          fileUrl,
+          thumbnail,
+          tags: uploadForm.category ? [uploadForm.category.toLowerCase()] : []
+        };
+
+        if (selectedItem) {
+          await updateMediaItem(selectedItem.id, mediaData);
+          alert('Media updated successfully!');
+        } else {
+          await addMediaItem(mediaData);
+          alert('Media uploaded successfully!');
+        }
+
+        setShowModal(false);
+        // Reset form
+        setUploadForm({
+          title: '',
+          description: '',
+          type: 'image',
+          category: 'General',
+          status: 'published',
+          featured: false
+        });
+        setSelectedFile(null);
+        setFilePreview(null);
+      }
     } catch (error) {
       alert('Error saving media: ' + error.message);
     }
