@@ -63,59 +63,79 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  // Update DataContext to expose a method to add already-saved media
+  // Add method to directly add an already-saved media item to state
+  const addSavedMediaItem = (mediaItem) => {
+    setMediaItems(prevItems => [mediaItem, ...prevItems]);
+    return mediaItem;
+  };
+
+  // Update the existing addMediaItem to handle both cases
   const addMediaItem = async (mediaData) => {
     try {
+      // If mediaData has _id or id, it's already saved - just add to state
+      if (mediaData._id || mediaData.id) {
+        setMediaItems(prevItems => [mediaData, ...prevItems]);
+        return mediaData;
+      }
+      
+      // Otherwise, save to backend first (this path won't be used for file uploads)
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE}/media`, {
         method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          ...mediaData,
-          createdAt: new Date().toISOString(), // optional, backend may auto-set
-        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(mediaData)
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to add media item');
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to add media');
       }
 
-      const newItem = await response.json(); // assuming backend returns full object
-      setMediaItems(prev => [...prev, newItem]);
-
-      console.log('Added media item:', newItem.title);
+      const newItem = await response.json();
+      setMediaItems(prevItems => [newItem, ...prevItems]);
+      
       return newItem;
-    } catch (err) {
-      console.error('Error adding media item:', err);
-      throw err; // Let form handle error
+    } catch (error) {
+      console.error('Error adding media:', error);
+      throw error;
     }
   };
 
+  // Update the updateMediaItem function to properly update state
   const updateMediaItem = async (id, updates) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE}/media/${id}`, {
         method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({
-          ...updates,
-          updatedAt: new Date().toISOString(),
-        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updates)
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update media item');
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to update media');
       }
 
       const updatedItem = await response.json();
-      setMediaItems(prev =>
-        prev.map(item => (item.id === id ? updatedItem : item))
+      
+      // Update local state
+      setMediaItems(prevItems => 
+        prevItems.map(item => 
+          (item.id === id || item._id === id) ? updatedItem : item
+        )
       );
-
-      console.log('Updated media item:', id);
+      
       return updatedItem;
-    } catch (err) {
-      console.error('Error updating media item:', err);
-      throw err;
+    } catch (error) {
+      console.error('Error updating media:', error);
+      throw error;
     }
   };
 
@@ -215,6 +235,7 @@ export const DataProvider = ({ children }) => {
 
     // CRUD
     addMediaItem,
+    addSavedMediaItem, // New method for already-saved items
     updateMediaItem,
     deleteMediaItem,
 

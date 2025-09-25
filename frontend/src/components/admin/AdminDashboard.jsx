@@ -7,6 +7,9 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
+// 👇 Replace with your actual backend URL
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const { 
@@ -173,6 +176,7 @@ const AdminDashboard = () => {
     }
   };
 
+  // Update the handleSubmit function
   const handleSubmit = async () => {
     if (!uploadForm.title.trim()) {
       showNotification('error', 'Please enter a title');
@@ -187,7 +191,7 @@ const AdminDashboard = () => {
     setIsSubmitting(true);
 
     try {
-      // For actual file upload, you should use FormData
+      // For actual file upload
       if (selectedFile && !selectedItem) {
         const formData = new FormData();
         formData.append('file', selectedFile);
@@ -200,7 +204,7 @@ const AdminDashboard = () => {
 
         // Upload using FormData to your backend
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5001/api/media/upload', {
+        const response = await fetch(`${API_BASE}/media/upload`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -213,32 +217,39 @@ const AdminDashboard = () => {
           throw new Error(error.message || 'Upload failed');
         }
 
-        const result = await response.json();
+        const newMedia = await response.json();
+        
+        // Add the new media item to the context without reload
+        await addMediaItem(newMedia);
+        
         showNotification('success', 'Media uploaded successfully!');
         setShowModal(false);
-        // Refresh media items
-        window.location.reload(); // Or call a refresh function
-      } else {
-        // For updates or when no real file (using existing logic)
-        let fileUrl = selectedItem?.fileUrl;
-        let thumbnail = selectedItem?.thumbnail;
-
+        
+        // Reset form
+        setUploadForm({
+          title: '',
+          description: '',
+          type: 'image',
+          category: 'General',
+          status: 'published',
+          featured: false
+        });
+        setSelectedFile(null);
+        setFilePreview(null);
+        
+      } else if (selectedItem) {
+        // For updates
         const mediaData = {
           ...uploadForm,
-          fileUrl,
-          thumbnail,
+          fileUrl: selectedItem.fileUrl,
+          thumbnail: selectedItem.thumbnail,
           tags: uploadForm.category ? [uploadForm.category.toLowerCase()] : []
         };
 
-        if (selectedItem) {
-          await updateMediaItem(selectedItem.id, mediaData);
-          showNotification('success', 'Media updated successfully!');
-        } else {
-          await addMediaItem(mediaData);
-          showNotification('success', 'Media uploaded successfully!');
-        }
-
+        await updateMediaItem(selectedItem.id || selectedItem._id, mediaData);
+        showNotification('success', 'Media updated successfully!');
         setShowModal(false);
+        
         // Reset form
         setUploadForm({
           title: '',
