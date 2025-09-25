@@ -1,9 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    ArrowRight, Users, Building, Target, Heart, Globe
+    ArrowRight, Users, Building, Target, Heart, Globe, Clock
 } from 'lucide-react';
-// import CountUp from 'react-countup';
+import { useData } from '../contexts/DataContext';
+
+// Add this helper function for relative time
+const getRelativeTime = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+    
+    if (seconds < 60) {
+        return 'just now';
+    }
+    
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) {
+        return minutes === 1 ? '1 min ago' : `${minutes} mins ago`;
+    }
+    
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+        return hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+    }
+    
+    const days = Math.floor(hours / 24);
+    if (days < 7) {
+        return days === 1 ? '1 day ago' : `${days} days ago`;
+    }
+    
+    const weeks = Math.floor(days / 7);
+    if (weeks < 4) {
+        return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+    }
+    
+    const months = Math.floor(days / 30);
+    if (months < 12) {
+        return months === 1 ? '1 month ago' : `${months} months ago`;
+    }
+    
+    const years = Math.floor(days / 365);
+    return years === 1 ? '1 year ago' : `${years} years ago`;
+};
 
 // Animation hooks (same as before)
 const useIntersectionObserver = (delay = 0) => {
@@ -103,6 +142,30 @@ const CountUp = ({ end, duration = 2000, suffix = "", decimals = 0 }) => {
 
 const BeautifulHomePage = () => {
    const [currentSlide, setCurrentSlide] = useState(0);
+   const { mediaItems, loading: mediaLoading } = useData();
+   const [currentTime, setCurrentTime] = useState(new Date());
+
+   // Update current time every minute to keep relative times fresh
+   useEffect(() => {
+       const timer = setInterval(() => {
+           setCurrentTime(new Date());
+       }, 60000); // Update every minute
+
+       return () => clearInterval(timer);
+   }, []);
+
+   // Get the latest 3 published media items sorted by most recent first
+   const latestNews = React.useMemo(() => {
+       return mediaItems
+           .filter(item => item.status === 'published')
+           .sort((a, b) => {
+               // Ensure we're sorting by most recent first
+               const dateA = new Date(a.createdAt || a.updatedAt);
+               const dateB = new Date(b.createdAt || b.updatedAt);
+               return dateB - dateA; // Most recent first
+           })
+           .slice(0, 3);
+   }, [mediaItems, currentTime]); // Re-calculate when mediaItems or currentTime changes
 
    // Beautiful hero slides
    const heroSlides = [
@@ -349,65 +412,113 @@ const BeautifulHomePage = () => {
                    </FadeInUp>
 
                    <div className="grid md:grid-cols-3 gap-8">
-                       {[
-                            {
-                                title: "Katsina LG Chairman Engages Social Media Influencers to Strengthen Youth Support for APC Government",
-                                image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757417267/apc_tkpfai.jpg",
-                                date: "September 8, 2025",
-                                excerpt: "The Executive Chairman of Katsina Local Government, Hon. Isah Miqdad AD Saude, has hosted an interactive forum with social media influencers and APC youth supporters across the local government. The meeting, held on Sunday, 7th September 2025, at the Local Government Secretariat conference hall, aimed at fostering unity, strengthening political engagement, and deepening youth participation in governance. The forum was well attended by prominent political figures, including former aides to the immediate past Governor of Katsina State, Rt. Hon. Aminu Bello Masari, Hon. Tanimu Sada Sa’ad, Hon. Khalil Aminu, and Hon. Abdulkarim AK Ibrahim. Others in attendance were the Special Assistant on Protocol to the Senior Special Assistant to the President of Nigeria, Bola Ahmad Tinubu, Hon. Umar Ahmad Zayyad; the Liaison Officer of Katsina Local Government, Hon. A. Hafiz; along with  other stakeholders. In his keynote address, Hon. Isah Miqdad AD Saude commended the efforts of youths who actively promote the achievements of the APC-led administration on social media platforms. He assured them of his commitment to creating stronger links between them and relevant stakeholders, to provide greater opportunities for youth empowerment and community development. The Chairman further encouraged the youths to remain steadfast in supporting the Executive Governor of Katsina State, Malam Dikko Umar Radda, PhD, CON, particularly as opposition parties intensify preparations ahead of the forthcoming elections. Zaharaddeen Muazu Rafindadi Press Secretary to Katsina LGC"
-                            },
-                            {
-                                title: "Unity in Prayer: Katsina LG Chairman Hosts Darika and Izala Scholars for Peace Prayer in the State",
-                                image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757417329/prayer_juykpj.jpg",
-                                date: "September 7, 2025",
-                                excerpt: "Katsina Local Government Chairman, Hon. Isah Miqdad AD Saude, on Sunday, 7th September 2025, convened and led a special prayer session with prominent Islamic scholars from the Darika and Izala groups at the Local Government Secretariat Mosque. The gathering was organized to seek divine intervention for peace, security, and stability in Katsina State. In his opening address, Hon. Saude expressed deep appreciation to the scholars for honoring the invitation despite the short notice. He stressed that the central purpose of the event was to unite the religious community in collective prayers for an end to the security challenges confronting the state. He further explained that the initiative followed the directive of the Executive Governor of Katsina State, Malam Dikko Umaru Radda, who called for collaboration between clerics from both Darika and Izala traditions to offer special prayers for peace and harmony across the state. Special Advisers to the Governor on Darika and Izala Affairs, Malam Muhammad Mahi Bello and Hon. Gambo Agaji, respectively, also delivered goodwill messages, underscoring the critical role of prayers in the pursuit of peace, stability, and community resilience. The prayer session commenced with Khalifa Sheikh Malam Tijjani of Shehu Jafaru Zawiyya leading the supplications, joined by Khalifa Malam Abbati Rafindadi, Sheikh Malam Abba Bala Gambawara, and other clerics representing diverse religious groups. Each offered prayers beseeching Allah to bless Katsina with lasting peace and prosperity. The event drew wide attendance, including the Chairman of the Katsina Local Government Legislative Council, Hon. Ishaq Tas’iu Modoji, councillors of the local government, the representative of the Emir of Katsina at Shinkafi, the representative of Magajin Gari Katsina and Wakilin Kudu, Alhaji Abdu Illiyasu, as well as leaders of zawiyyas, Izala scholars, and other dignitaries. The session concluded with a closing prayer led by the Chief Imam of Katsina Central Mosque, Malam Mustapha Gambo, who prayed for peace, unity, and sustainable development in Katsina State. Zaharaddeen Muazu Rafindadi Press Secretary to Katsina LGC "
-                            },
-                            {
-                                title: "Katsina Local Government Council Chairman Hon. Isah Miqdad Ad Saude Participates in Exclusive NTA Katsina Television Program",
-                                image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757417329/nta_hbaip9.jpg",
-                                date: "September 3, 2025",
-                                excerpt: "Katsina Local Government Council Chairman, Hon. Isah Miqdad AD Saude, in a group photograph with the management and members of staff of the Nigerian Television Authority (NTA) Katsina, shortly after an exclusive and insightful live program where he spent an hour highlighting the achievements of His Excellency, Governor Mal. Dikko Umar Radda, PhD, CON. During the live session, Hon. Miqdad spoke extensively on education, including the foreign scholarship scheme initiated to support children of the poor, health and its ongoing infrastructure development with special reference to the General Amadi Rimi Orthopedic Hospital where the Governor is establishing a modern imaging center, as well as security and the sustained efforts being made to safeguard communities. The interview was engaging and informative, and he later granted a short follow-up interview after the live session, further emphasizing the importance of collective support in sustaining the progress being recorded across the state. Zaharaddeen Muazu Rafindadi Press Secretary to Katsina LGC "
-                            }
-                            ].map((news, index) => (
-                            <FadeInUp key={index} delay={index * 200}>
-                                <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
-                                <img
-                                    src={news.image}
-                                    alt={news.title}
-                                    className="w-full h-48 object-cover"
-                                />
-                                <div className="p-6 flex-1 flex flex-col">
-                                    <div className="text-sm text-green-600 font-medium mb-2">{news.date}</div>
-                                    <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
-                                    {news.title}
-                                    </h3>
-                                    <p className="text-gray-600 mb-4 flex-1 line-clamp-3">
-                                    {news.excerpt}
-                                    </p>
-                                    <Link
-                                    to="/media"
-                                    className="text-green-600 hover:text-green-700 font-semibold inline-flex items-center gap-1"
-                                    >
-                                    Read More
-                                    <ArrowRight className="w-4 h-4" />
-                                    </Link>
-                                </div>
-                                </div>
-                            </FadeInUp>
-                            ))}
+                       {mediaLoading ? (
+                           // Loading skeleton
+                           [...Array(3)].map((_, index) => (
+                               <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                                   <div className="w-full h-48 bg-gray-300"></div>
+                                   <div className="p-6">
+                                       <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+                                       <div className="h-6 bg-gray-300 rounded mb-3"></div>
+                                       <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                                       <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                                       <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                                   </div>
+                               </div>
+                           ))
+                       ) : latestNews.length > 0 ? (
+                           latestNews.map((news, index) => (
+                               <FadeInUp key={news.id || news._id || index} delay={index * 200}>
+                                   <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full group">
+                                       <div className="relative overflow-hidden">
+                                           <img
+                                               src={news.thumbnail || news.fileUrl || '/default-news-image.jpg'}
+                                               alt={news.title}
+                                               className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                                               onError={(e) => {
+                                                   e.target.src = '/default-news-image.jpg';
+                                               }}
+                                           />
+                                           {/* New/Latest badge for very recent items */}
+                                           {new Date() - new Date(news.createdAt) < 86400000 && ( // Less than 24 hours
+                                               <div className="absolute top-4 right-4">
+                                                   <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+                                                       NEW
+                                                   </span>
+                                               </div>
+                                           )}
+                                       </div>
+                                       <div className="p-6 flex-1 flex flex-col">
+                                           <div className="flex items-center gap-2 text-sm text-green-600 font-medium mb-2">
+                                               <Clock className="w-4 h-4" />
+                                               <span className="font-semibold">
+                                                   {getRelativeTime(news.createdAt || news.updatedAt)}
+                                               </span>
+                                               <span className="text-gray-400">•</span>
+                                               <span className="text-gray-500">
+                                                   {new Date(news.createdAt).toLocaleDateString('en-US', {
+                                                       month: 'short',
+                                                       day: 'numeric'
+                                                   })}
+                                               </span>
+                                           </div>
+                                           <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-green-600 transition-colors">
+                                               {news.title}
+                                           </h3>
+                                           <p className="text-gray-600 mb-4 flex-1 line-clamp-3">
+                                               {news.description || news.excerpt || 'Click to read more about this news item.'}
+                                           </p>
+                                           <div className="flex items-center justify-between">
+                                               <Link
+                                                   to={`/media/${news.id || news._id}`}
+                                                   className="text-green-600 hover:text-green-700 font-semibold inline-flex items-center gap-1 group-hover:gap-2 transition-all"
+                                               >
+                                                   Read More
+                                                   <ArrowRight className="w-4 h-4" />
+                                               </Link>
+                                               {news.category && (
+                                                   <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                                                       {news.category}
+                                                   </span>
+                                               )}
+                                           </div>
+                                       </div>
+                                   </div>
+                               </FadeInUp>
+                           ))
+                       ) : (
+                           // Fallback when no news items exist
+                           <div className="col-span-3 text-center py-12">
+                               <div className="inline-block p-6 bg-gray-50 rounded-full mb-4">
+                                   <Globe className="w-12 h-12 text-gray-400" />
+                               </div>
+                               <p className="text-gray-500 mb-4 text-lg">No news items available at the moment.</p>
+                               <p className="text-gray-400 mb-6">Check back soon for updates!</p>
+                               {/* Only show admin link if user is logged in as admin */}
+                               <Link
+                                   to="/media"
+                                   className="text-green-600 hover:text-green-700 font-semibold inline-flex items-center gap-2"
+                               >
+                                   Browse All Media
+                                   <ArrowRight className="w-4 h-4" />
+                               </Link>
+                           </div>
+                       )}
                    </div>
 
-                   <FadeInUp delay={600}>
-                       <div className="text-center mt-12">
-                           <Link
-                               to="/media"
-                               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl inline-flex items-center gap-2"
-                           >
-                               View All Media
-                               <ArrowRight className="w-6 h-6" />
-                           </Link>
-                       </div>
-                   </FadeInUp>
+                   {latestNews.length > 0 && (
+                       <FadeInUp delay={600}>
+                           <div className="text-center mt-12">
+                               <Link
+                                   to="/media"
+                                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl inline-flex items-center gap-2"
+                               >
+                                   View All Media
+                                   <ArrowRight className="w-6 h-6" />
+                               </Link>
+                           </div>
+                       </FadeInUp>
+                   )}
                </div>
            </section>
 
