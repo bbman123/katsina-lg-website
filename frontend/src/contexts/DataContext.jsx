@@ -119,23 +119,32 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  // Update the deleteMediaItem function in DataContext
   const deleteMediaItem = async (id) => {
     try {
-      const response = await fetch(`${API_BASE}/media/${id}`, {
+      const token = localStorage.getItem('token');
+      
+      // Use the API_BASE_URL constant instead of hardcoded URL
+      const response = await fetch(`${API_BASE_URL}/media/${id}`, {
         method: 'DELETE',
-        headers: getAuthHeaders()
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to delete media item');
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete media');
       }
 
-      setMediaItems(prev => prev.filter(item => item.id !== id));
-      console.log('Deleted media item:', id);
-    } catch (err) {
-      console.error('Error deleting media item:', err);
-      throw err;
+      // Remove from local state
+      setMediaItems(prevItems => prevItems.filter(item => item.id !== id && item._id !== id));
+      
+      console.log('Media deleted successfully:', id);
+      return true;
+    } catch (error) {
+      console.error('Error deleting media:', error);
+      throw error;
     }
   };
 

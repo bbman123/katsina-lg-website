@@ -31,6 +31,7 @@ const AdminDashboard = () => {
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   // Calculate stats from actual data
   const publishedMedia = getPublishedMedia();
@@ -41,15 +42,25 @@ const AdminDashboard = () => {
     draftMedia: mediaItems.filter(item => item.status === 'draft').length
   };
 
+  // Update the handleDelete function
   const handleDelete = async (type, id) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
+    if (!confirm('Are you sure you want to delete this item? This action cannot be undone.')) return;
+    
+    setDeletingId(id);
+    
     try {
       if (type === 'media') {
-        deleteMediaItem(id);
+        // Use DataContext's deleteMediaItem which handles everything
+        await deleteMediaItem(id);
+        
+        // Show success message
         alert('Media deleted successfully!');
       }
     } catch (error) {
+      console.error('Error deleting item:', error);
       alert('Error deleting item: ' + error.message);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -330,12 +341,15 @@ const AdminDashboard = () => {
       {/* Media Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {mediaItems.map((item) => (
-          <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
-            <div className="relative">
+          <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+            <div className="relative h-48 flex-shrink-0">
               <img 
-                src={item.thumbnail} 
+                src={item.thumbnail || item.fileUrl || '/default-media-image.jpg'} 
                 alt={item.title}
-                className="w-full h-48 object-cover"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.src = '/default-media-image.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
               
@@ -344,29 +358,34 @@ const AdminDashboard = () => {
                   item.type === 'video' ? 'bg-red-500' :
                   item.type === 'document' ? 'bg-blue-500' : 'bg-green-500'
                 }`}>
-                  {item.type?.toUpperCase()}
+                  {item.type?.toUpperCase() || 'MEDIA'}
                 </span>
               </div>
 
               <div className="absolute top-3 right-3 flex gap-2">
                 <button 
                   onClick={() => openModal('media', item)}
-                  className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-lg"
                   title="Edit"
                 >
                   <Edit className="w-4 h-4" />
                 </button>
                 <button 
-                  onClick={() => handleDelete('media', item.id)}
-                  className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                  onClick={() => handleDelete('media', item._id)}
+                  disabled={deletingId === item._id}
+                  className={`p-2 ${deletingId === item._id ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600'} text-white rounded-lg transition-colors shadow-lg`}
                   title="Delete"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  {deletingId === item._id ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Trash2 className="w-4 h-4" />
+                  )}
                 </button>
               </div>
 
               {item.type === 'video' && (
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="bg-white/20 backdrop-blur-sm border-2 border-white rounded-full p-3">
                     <Play className="w-6 h-6 text-white" />
                   </div>
@@ -374,27 +393,42 @@ const AdminDashboard = () => {
               )}
             </div>
 
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2">{item.title}</h3>
-              <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
+            <div className="p-4 flex flex-col flex-1">
+              {/* Title - Fixed height with line clamp */}
+              <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 h-12 leading-6" title={item.title}>
+                {item.title}
+              </h3>
               
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-                <span>{item.category}</span>
-                <span className="flex items-center gap-1">
+              {/* Description - Fixed height with line clamp */}
+              <p className="text-sm text-gray-600 mb-3 line-clamp-2 h-10 leading-5" title={item.description}>
+                {item.description || 'No description available'}
+              </p>
+              
+              {/* Category and Views - Fixed position */}
+              <div className="flex items-center justify-between text-sm text-gray-500 mb-3 mt-auto">
+                <span className="truncate max-w-[100px]">{item.category || 'General'}</span>
+                <span className="flex items-center gap-1 flex-shrink-0">
                   <Eye className="w-4 h-4" />
                   {item.views?.toLocaleString() || item.downloads?.toLocaleString() || 0}
                 </span>
               </div>
 
+              {/* Status and Date - Fixed position */}
               <div className="flex items-center justify-between">
                 <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${
-                  item.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                  item.status === 'published' ? 'bg-green-100 text-green-800' : 
+                  item.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 
+                  'bg-gray-100 text-gray-600'
                 }`}>
-                  {item.featured && <span>⭐</span>}
+                  {item.featured && <span className="text-yellow-500">⭐</span>}
                   {item.status}
                 </span>
                 <span className="text-xs text-gray-500">
-                  {new Date(item.createdAt).toLocaleDateString()}
+                  {new Date(item.createdAt).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
                 </span>
               </div>
             </div>
