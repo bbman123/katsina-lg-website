@@ -125,7 +125,7 @@ export const DataProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       
       // Use the API_BASE_URL constant instead of hardcoded URL
-      const response = await fetch(`${API_BASE_URL}/media/${id}`, {
+      const response = await fetch(`${API_BASE}/media/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
