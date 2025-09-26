@@ -8,6 +8,7 @@ import ProtectedRoute from './components/admin/ProtectedRoute';
 import BeautifulWebsite from './components/BeautifulWebsite';
 import BeautifulHomePage from './pages/BeautifulHomePage';
 import BeautifulMediaPage from './pages/BeautifulMediaPage';
+import MediaDetailPage from './pages/MediaDetailPage';
 
 // Admin Components
 import AdminLogin from './pages/admin/AdminLogin';
@@ -242,6 +243,7 @@ const MainWebsite = () => {
             <Routes>
                 <Route path="/" element={<BeautifulHomePage />} />
                 <Route path="/media" element={<BeautifulMediaPage />} />
+                <Route path="/media/:id" element={<MediaDetailPage />} />
                 {/* <Route path="/media" element={<BeautifulMediaPage />} /> */}
                 <Route path="/about" element={<BeautifulAboutPage />} />
                 <Route path="/contact" element={<BeautifulContactPage />} />
