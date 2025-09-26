@@ -17,7 +17,8 @@ const AdminDashboard = () => {
     addMediaItem, 
     updateMediaItem, 
     deleteMediaItem, 
-    getPublishedMedia 
+    getPublishedMedia,
+    refresh // ✅ Add this
   } = useData();
   
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -219,8 +220,9 @@ const AdminDashboard = () => {
 
         const newMedia = await response.json();
         
-        // Add the new media item to the context without reload
-        await addMediaItem(newMedia);
+        // ✅ FIX: Don't call addMediaItem, just refresh the media list
+        // The media is already saved in the database
+        await refresh(); // This will fetch the updated list from the backend
         
         showNotification('success', 'Media uploaded successfully!');
         setShowModal(false);
