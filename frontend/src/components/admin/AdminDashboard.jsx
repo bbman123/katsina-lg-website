@@ -220,9 +220,8 @@ const AdminDashboard = () => {
 
         const newMedia = await response.json();
         
-        // ✅ FIX: Don't call addMediaItem, just refresh the media list
-        // The media is already saved in the database
-        await refresh(); // This will fetch the updated list from the backend
+        // Refresh the media list from the backend
+        await refresh();
         
         showNotification('success', 'Media uploaded successfully!');
         setShowModal(false);
@@ -242,13 +241,36 @@ const AdminDashboard = () => {
       } else if (selectedItem) {
         // For updates
         const mediaData = {
-          ...uploadForm,
+          title: uploadForm.title,
+          description: uploadForm.description,
+          type: uploadForm.type,
+          category: uploadForm.category,
+          status: uploadForm.status,
+          featured: uploadForm.featured,
           fileUrl: selectedItem.fileUrl,
           thumbnail: selectedItem.thumbnail,
           tags: uploadForm.category ? [uploadForm.category.toLowerCase()] : []
         };
 
-        await updateMediaItem(selectedItem.id || selectedItem._id, mediaData);
+        // Call the update API
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE}/media/${selectedItem._id || selectedItem.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(mediaData)
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Update failed');
+        }
+
+        // ✅ Refresh the media list after successful update
+        await refresh();
+        
         showNotification('success', 'Media updated successfully!');
         setShowModal(false);
         
@@ -385,7 +407,7 @@ const AdminDashboard = () => {
               </div>
               <div className="flex flex-col md:flex-row items-end md:items-center gap-2">
                 <span className="text-xs md:text-sm text-gray-500">
-                  {item.views ? `${item.views.toLocaleString()} views` : `${item.downloads?.toLocaleString() || 0} downloads`}
+                  {item.views ? `${item.views.toLocaleString()} views` : `${item.downloads?.toLocaleString() || 0} views`}
                 </span>
                 <button 
                   onClick={() => openModal('media', item)}
@@ -821,16 +843,25 @@ const AdminDashboard = () => {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Type
                     </label>
-                    <select
-                      value={uploadForm.type}
-                      onChange={(e) => setUploadForm(prev => ({ ...prev, type: e.target.value }))}
-                      disabled={isSubmitting}
-                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <option value="image">Image</option>
-                      <option value="video">Video</option>
-                      <option value="document">Document</option>
-                    </select>
+                    {selectedItem ? (
+                      // Show as read-only field when editing
+                      <div className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 text-sm md:text-base">
+                        <span className="capitalize">{uploadForm.type}</span>
+                        <span className="text-xs text-gray-500 ml-2">(Cannot be changed)</span>
+                      </div>
+                    ) : (
+                      // Show select dropdown when adding new media
+                      <select
+                        value={uploadForm.type}
+                        onChange={(e) => setUploadForm(prev => ({ ...prev, type: e.target.value }))}
+                        disabled={isSubmitting}
+                        className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                        <option value="document">Document</option>
+                      </select>
+                    )}
                   </div>
 
                   {/* Category */}
