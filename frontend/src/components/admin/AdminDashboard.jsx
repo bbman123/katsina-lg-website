@@ -369,7 +369,7 @@ const AdminDashboard = () => {
         </h2>
         <div className="space-y-3 md:space-y-4">
           {mediaItems.slice(0, 5).map((item) => (
-            <div key={item.id} className="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+            <div key={item._id || item.id} className="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
               <img 
                 src={item.thumbnail || item.fileUrl || '/default-media-image.jpg'} 
                 alt={item.title}
@@ -421,7 +421,7 @@ const AdminDashboard = () => {
       {/* Media Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         {mediaItems.map((item) => (
-          <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+          <div key={item._id || item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
             <div className="relative h-40 md:h-48 flex-shrink-0">
               <img 
                 src={item.thumbnail || item.fileUrl || '/default-media-image.jpg'} 
@@ -546,7 +546,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Add CSS for animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes slideIn {
           from {
             opacity: 0;
