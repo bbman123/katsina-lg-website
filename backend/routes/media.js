@@ -322,4 +322,98 @@ router.post('/:id/download', async (req, res) => {
   }
 });
 
+// Add this new route for tracking views
+router.post('/:id/view', async (req, res) => {
+  try {
+    const mediaId = req.params.id;
+    
+    // Get client IP (considering proxy)
+    const ip = req.headers['x-forwarded-for'] || 
+               req.connection.remoteAddress || 
+               req.socket.remoteAddress ||
+               req.ip;
+    
+    const userAgent = req.headers['user-agent'];
+    
+    // Find media item
+    const media = await Media.findById(mediaId);
+    
+    if (!media) {
+      return res.status(404).json({
+        success: false,
+        message: 'Media not found'
+      });
+    }
+    
+    // Check if this IP has viewed in the last hour (prevent spam)
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    const recentView = media.viewDetails.find(view => 
+      view.ip === ip && new Date(view.viewedAt) > oneHourAgo
+    );
+    
+    if (!recentView) {
+      // Add view detail
+      media.viewDetails.push({
+        viewedAt: new Date(),
+        ip: ip,
+        userAgent: userAgent,
+        userId: req.user ? req.user.id : null
+      });
+      
+      // Increment total views
+      media.views += 1;
+      
+      // Increment weekly views
+      media.weeklyViews += 1;
+      
+      // Keep only last 1000 view details to prevent document size issues
+      if (media.viewDetails.length > 1000) {
+        media.viewDetails = media.viewDetails.slice(-1000);
+      }
+      
+      await media.save();
+    }
+    
+    res.json({
+      success: true,
+      views: media.views,
+      message: 'View tracked successfully'
+    });
+    
+  } catch (error) {
+    console.error('Error tracking view:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to track view',
+      error: error.message
+    });
+  }
+});
+
+// Add route to get trending media (top 5 most viewed this week)
+router.get('/trending/week', async (req, res) => {
+  try {
+    const trending = await Media.find({
+      status: 'published',
+      weeklyViews: { $gt: 0 }
+    })
+    .sort({ weeklyViews: -1 })
+    .limit(5)
+    .select('title slug thumbnail fileUrl type category views weeklyViews createdAt');
+    
+    res.json({
+      success: true,
+      data: trending
+    });
+    
+  } catch (error) {
+    console.error('Error fetching trending media:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch trending media',
+      error: error.message
+    });
+  }
+});
+
 module.exports = router;

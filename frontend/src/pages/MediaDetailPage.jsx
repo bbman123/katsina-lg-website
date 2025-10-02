@@ -98,14 +98,24 @@ const MediaDetailPage = () => {
         }
     }, [id, mediaItems, loading, refresh]);
 
+    // Update the trackView function
     const trackView = async (mediaId) => {
         try {
-            // Implement view tracking API call here
-            console.log('Tracking view for:', mediaId);
-            // You can uncomment this when you have the endpoint ready
-            // await fetch(`${API_BASE}/media/${mediaId}/view`, { method: 'POST' });
+            // Call the view tracking endpoint
+            const response = await fetch(`${API_BASE}/media/${mediaId}/view`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('View tracked:', data.views);
+            }
         } catch (error) {
             console.error('Error tracking view:', error);
+            // Don't show error to user, just log it
         }
     };
 

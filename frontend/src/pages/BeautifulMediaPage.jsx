@@ -52,6 +52,8 @@ const BeautifulMediaPage = () => {
     const [sortBy, setSortBy] = useState('newest'); // newest, oldest, popular
     const [viewMode, setViewMode] = useState('grid'); // grid or list
     const [currentTime, setCurrentTime] = useState(new Date());
+    // Add state for trending items
+    const [trendingFromAPI, setTrendingFromAPI] = useState([]);
 
     // Update current time every minute
     useEffect(() => {
@@ -145,14 +147,36 @@ const BeautifulMediaPage = () => {
             .slice(0, 2);
     }, [mediaItems]);
 
-    // Get trending items (most viewed in the last 7 days)
+    // Add useEffect to fetch trending
+    useEffect(() => {
+        fetchTrending();
+    }, []);
+
+    const fetchTrending = async () => {
+        try {
+            const response = await fetch(`${API_BASE}/media/trending/week`);
+            if (response.ok) {
+                const data = await response.json();
+                setTrendingFromAPI(data.data || []);
+            }
+        } catch (error) {
+            console.error('Error fetching trending:', error);
+        }
+    };
+
+    // Update the trendingItems useMemo to use API data
     const trendingItems = useMemo(() => {
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        // Use API trending if available, otherwise fall back to local calculation
+        if (trendingFromAPI.length > 0) {
+            return trendingFromAPI;
+        }
+        
+        // Fallback: local calculation based on views
         return processedItems
-            .filter(item => new Date(item.createdAt) > sevenDaysAgo)
+            .filter(item => item.status === 'published')
             .sort((a, b) => (b.views || 0) - (a.views || 0))
             .slice(0, 5);
-    }, [processedItems]);
+    }, [trendingFromAPI, processedItems]);
 
     const getTypeColor = (type) => {
         switch (type) {

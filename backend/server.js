@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/database');
+const setupCronJobs = require('./utils/cronJobs');
 require('dotenv').config();
 
 // Define PORT at the beginning
@@ -96,4 +97,8 @@ app.listen(PORT, () => {
     console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
     console.log(`🌐 Frontend should be on: http://localhost:3000`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    // Initialize cron jobs
+    if (process.env.NODE_ENV === 'production') {
+        setupCronJobs();
+    }
 });

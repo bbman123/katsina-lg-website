@@ -49,9 +49,28 @@ const mediaSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  downloads: {
+  // Add detailed view tracking
+  viewDetails: [{
+    viewedAt: {
+      type: Date,
+      default: Date.now
+    },
+    ip: String,
+    userAgent: String,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: false
+    }
+  }],
+  // Track weekly views for trending calculation
+  weeklyViews: {
     type: Number,
     default: 0
+  },
+  lastViewReset: {
+    type: Date,
+    default: Date.now
   },
   tags: [{
     type: String,

@@ -10,7 +10,8 @@
     "delete-admin": "node scripts/deleteAdmin.js",
     "setup-local-db": "node scripts/setupLocalDB.js",
     "test-connection": "node scripts/testConnection.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "reset-weekly-views": "node scripts/resetWeeklyViews.js"
   },
   "keywords": [
     "government",
@@ -34,6 +35,7 @@
     "mongodb": "^6.20.0",
     "mongoose": "^7.5.0",
     "multer": "^1.4.4",
+    "node-cron": "^4.2.1",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {
