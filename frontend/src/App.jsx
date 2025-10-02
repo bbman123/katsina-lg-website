@@ -66,44 +66,149 @@ const BeautifulAboutPage = () => (
                 ))}
             </div>
 
-            {/* Leadership Team */}
+            {/* Leadership Team with Full Biographies */}
             <div className="mt-20">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold text-gray-800 mb-4">Leadership Team</h2>
                     <p className="text-xl text-gray-600">Experienced leaders driving transformation and innovation</p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8">
+                <div className="space-y-12">
                     {[
                         { 
                             name: "Hon. Isah Miqdad", 
                             position: "Executive Chairman", 
-                            image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757415023/Isah_Miqdad_qwwbpm.png",
-                            experience: "" 
+                            image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1759407845/chair_ante6q.png",
+                            biography: [
+                                "Hon. Isah Miqdad was born in Katsina Local Government Area on November 3, 1992. He completed his primary education at Tarbiyya Nursery and Primary School (1995-2003), secondary education at Ulul-albab Science and Secondary School and Onward College, Katsina, and graduated from Umaru Musa Yar'adua University in 2016.",
+                                "His political career includes serving as pioneering Chairman of the Katsina Community Development Association, APC Local Government and Ward Congress Chairman in Charanchi (2018), and contesting the APC Katsina South Senatorial primary elections (2022). He was appointed Katsina Local Government Coordinator for the 'Not Too Young to Run' Bill and served on the Media Directorate for the 2023 APC general elections in Katsina State.",
+                                "Professionally, he joined the Nigerian Small and Medium Enterprises Development Agency (SMEDAN) as Commercial Officer in 2020. Following Governor Dikko Umaru Radda's inauguration in May 2023, he was appointed Senior Special Assistant on Digital Media, a position he held for one year before resigning to contest the Chairmanship of Katsina Local Government, which he won on February 15, 2025."
+                            ]
                         },
                         { 
-                            name: "Hon. Abdulkarim Al'Ameen Modibbo", 
+                            name: "Hon. Abdulkarim Al-Ameen Modibbo", 
                             position: "Secretary", 
                             image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757415130/sec_wg14nx.jpg",
-                            experience: "" 
+                            biography: [
+                                "Malam Abdulkarim Al-Ameen Modibbo was born on 29th December 1988 in Katsina. He began his educational journey at Police Children Primary School, Katsina (1996–2002), and later proceeded to Government Pilot Secondary School, Daura (2005–2008). He obtained a Bachelor's degree from Katsina University (now Al-Qalam University) between 2008 and 2012.",
+                                "In 2013, he completed the National Youth Service Corps (NYSC). Throughout his career, Malam Abdulkarim has served in various educational and religious capacities, combining both academic and spiritual leadership.",
+                                "In 2022, he went back to Alqalam University Katsina for his Master's Degree program (in view). He was appointed as Secretary to Katsina Local Government in May 2025."
+                            ]
                         },
                         { 
                             name: "Hon. Ishaq Tasi'u Modoji", 
-                            position: "Leader", 
+                            position: "House Leader", 
                             image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757415131/leader_hjhzfl.jpg",
-                            experience: "" 
+                            biography: [
+                                "Hon. Ishaq Tasi'u Modoji was born on November 5, 1987, in Katsina State, Nigeria, specifically in the Katsina Local Government Area. He began his primary education at Shinkafi Qur'anic Model Primary School from 1993 to 1999. He later attended Sir Usman Nagogo College of Arabic and Islamic Studies (SUNCAIS) in Katsina, where he completed both his junior and senior secondary education from 2005 to 2011.",
+                                "In his political and leadership experience, he served as a Youth Leader for the Action Congress of Nigeria (ACN) in Shinkafi B Ward from 2011 to 2013. He then became Secretary of the All Progressives Congress (APC) in Shinkafi B Ward from 2013 to 2020, and subsequently served as Chairman of the APC in the same ward from 2020 to 2022.",
+                                "He ran for and was elected as Councillor for Shinkafi B Ward in 2022. Hon. Modoji is currently the Council Leader of Katsina Local Government, a position he has held since 2025."
+                            ]
                         }
                     ].map((leader, index) => (
-                        <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                            <img
-                                src={leader.image}
-                                alt={leader.name}
-                                className="w-full h-64 object-cover"
-                            />
-                            <div className="p-6">
-                                <h3 className="text-xl font-bold text-gray-800 mb-1">{leader.name}</h3>
-                                <p className="text-green-600 font-semibold mb-2">{leader.position}</p>
-                                <p className="text-gray-600">{leader.experience}</p>
+                        <div key={index} className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
+                            <div className="md:flex">
+                                <div className="md:w-1/3">
+                                    <img
+                                        src={leader.image}
+                                        alt={leader.name}
+                                        className="w-full h-64 md:h-full object-cover"
+                                    />
+                                </div>
+                                <div className="md:w-2/3 p-8">
+                                    <h3 className="text-2xl font-bold text-gray-800 mb-2">{leader.name}</h3>
+                                    <p className="text-green-600 font-semibold text-lg mb-4">{leader.position}</p>
+                                    <div className="space-y-3">
+                                        {leader.biography.map((paragraph, pIndex) => (
+                                            <p key={pIndex} className="text-gray-600 leading-relaxed text-justify">
+                                                {paragraph}
+                                            </p>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Ward Councilors Section */}
+            <div className="mt-20">
+                <div className="text-center mb-12">
+                    <h2 className="text-4xl font-bold text-gray-800 mb-4">Ward Councilors</h2>
+                    <p className="text-xl text-gray-600">Dedicated representatives serving our communities</p>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {[
+                        { name: "Hon. Abdullahi Musa", position: "Ward 1 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Fatima Ibrahim", position: "Ward 2 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Usman Garba", position: "Ward 3 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Aisha Yusuf", position: "Ward 4 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Muhammad Sani", position: "Ward 5 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Zainab Ahmed", position: "Ward 6 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Ibrahim Lawal", position: "Ward 7 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Hadiza Kabir", position: "Ward 8 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Yakubu Aliyu", position: "Ward 9 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Maryam Bashir", position: "Ward 10 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Salisu Abdullahi", position: "Ward 11 Councilor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Hafsat Umar", position: "Ward 12 Councilor", image: "/default-avatar.jpg" }
+                    ].map((councilor, index) => (
+                        <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                            <div className="p-4 text-center">
+                                <div className="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden bg-gray-200">
+                                    <img
+                                        src={councilor.image}
+                                        alt={councilor.name}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.target.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(councilor.name) + '&background=10b981&color=fff';
+                                        }}
+                                    />
+                                </div>
+                                <h4 className="font-semibold text-gray-800 text-sm">{councilor.name}</h4>
+                                <p className="text-xs text-green-600 mt-1">{councilor.position}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Supervisory Councilors Section */}
+            <div className="mt-20">
+                <div className="text-center mb-12">
+                    <h2 className="text-4xl font-bold text-gray-800 mb-4">Supervisory Councilors</h2>
+                    <p className="text-xl text-gray-600">Overseeing key departments and ensuring excellence in service delivery</p>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {[
+                        { name: "Hon. Ahmad Bello", position: "Education Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Bilkisu Abubakar", position: "Health Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Nasir Mohammed", position: "Agriculture Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Hauwa Idris", position: "Women Affairs Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Kabir Hassan", position: "Works Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Safiya Usman", position: "Environment Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Aminu Yahaya", position: "Finance Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Rakiya Suleiman", position: "Social Services Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Bala Abdullahi", position: "Youth & Sports Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Jamila Yusuf", position: "Commerce Supervisor", image: "/default-avatar.jpg" },
+                        { name: "Hon. Isa Mahmud", position: "Information Supervisor", image: "/default-avatar.jpg" }
+                    ].map((supervisor, index) => (
+                        <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                            <div className="p-4 text-center">
+                                <div className="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden bg-gray-200">
+                                    <img
+                                        src={supervisor.image}
+                                        alt={supervisor.name}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.target.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(supervisor.name) + '&background=3b82f6&color=fff';
+                                        }}
+                                    />
+                                </div>
+                                <h4 className="font-semibold text-gray-800 text-sm">{supervisor.name}</h4>
+                                <p className="text-xs text-blue-600 mt-1">{supervisor.position}</p>
                             </div>
                         </div>
                     ))}
@@ -205,7 +310,7 @@ const BeautifulContactPage = () => (
                     </div>
                 </div>
             </div>
-            
+
             {/* Contact Form */}
             <div className="grid lg:grid-cols-2 gap-12">
                 <div className="bg-gradient-to-br from-green-600 to-blue-600 rounded-3xl p-8 text-white">

@@ -182,7 +182,7 @@ const BeautifulHomePage = () => {
            title: "Empowering Our Communities",
            subtitle: "Digital Innovation, Citizen-Centric Services",
            description: "Transforming local governance through modern technology and innovative solutions that put citizens at the heart of everything we do.",
-           image: "https://res.cloudinary.com/dhxcqjmkp/image/upload_v1757416784/empowering_sot9mv.jpg",
+           image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757416784/empowering_sot9mv.jpg",
            stats: { programs: 12, citizens: 3200, services: 850 }
        },
        {
