@@ -182,7 +182,7 @@ const BeautifulHomePage = () => {
            title: "Empowering Our Communities",
            subtitle: "Digital Innovation, Citizen-Centric Services",
            description: "Transforming local governance through modern technology and innovative solutions that put citizens at the heart of everything we do.",
-           image: "https://res.cloudinary.com/dhxcqjmkp/image/upload/v1757416784/empowering_sot9mv.jpg",
+           image: "https://res.cloudinary.com/dhxcqjmkp/image/upload_v1757416784/empowering_sot9mv.jpg",
            stats: { programs: 12, citizens: 3200, services: 850 }
        },
        {
@@ -470,7 +470,7 @@ const BeautifulHomePage = () => {
                                            </p>
                                            <div className="flex items-center justify-between">
                                                <Link
-                                                   to={`/media/${news.id || news._id}`}
+                                                   to={`/media/${news.slug || news._id || news.id}`}
                                                    className="text-green-600 hover:text-green-700 font-semibold inline-flex items-center gap-1 group-hover:gap-2 transition-all"
                                                >
                                                    Read More

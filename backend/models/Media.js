@@ -60,6 +60,11 @@ const mediaSchema = new mongoose.Schema({
   uploadedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
+  },
+  slug: {
+    type: String,
+    unique: true,
+    index: true
   }
 }, {
   timestamps: true
@@ -67,5 +72,37 @@ const mediaSchema = new mongoose.Schema({
 
 // Index for search
 mediaSchema.index({ title: 'text', description: 'text', tags: 'text' });
+
+// Add a pre-save hook to generate slug
+mediaSchema.pre('save', async function(next) {
+  if (this.isModified('title') || this.isNew) {
+    // Generate base slug from title
+    let baseSlug = this.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
+      .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
+      .substring(0, 100); // Limit length
+    
+    // Ensure uniqueness
+    let slug = baseSlug;
+    let counter = 1;
+    
+    while (true) {
+      const existing = await this.constructor.findOne({ 
+        slug: slug,
+        _id: { $ne: this._id } // Exclude current document
+      });
+      
+      if (!existing) break;
+      
+      // Add counter if duplicate found
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+    
+    this.slug = slug;
+  }
+  next();
+});
 
 module.exports = mongoose.model('Media', mediaSchema);

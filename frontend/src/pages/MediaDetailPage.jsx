@@ -9,7 +9,7 @@ import {
 import { useData } from '../contexts/DataContext';
 
 const MediaDetailPage = () => {
-    const { id } = useParams();
+    const { id } = useParams(); // This could be slug or ID
     const navigate = useNavigate();
     const { mediaItems, loading } = useData();
     const [mediaItem, setMediaItem] = useState(null);
@@ -20,25 +20,46 @@ const MediaDetailPage = () => {
     const [downloadProgress, setDownloadProgress] = useState(false);
 
     useEffect(() => {
-        // Find the media item
-        const item = mediaItems.find(m => (m._id === id || m.id === id) && m.status === 'published');
-        setMediaItem(item);
-
-        // Find related items
-        if (item) {
-            const related = mediaItems
-                .filter(m => 
-                    m._id !== id && 
-                    m.id !== id && 
-                    m.status === 'published' &&
-                    (m.category === item.category || m.type === item.type)
-                )
-                .slice(0, 4);
-            setRelatedItems(related);
-
-            // Track view (you can implement this API call)
-            trackView(item._id || item.id);
-        }
+        const fetchMediaItem = async () => {
+            // First try to find in local state
+            let item = mediaItems.find(m => 
+                (m.slug === id || m._id === id || m.id === id) && 
+                m.status === 'published'
+            );
+            
+            // If not found locally and we have a slug-like ID, fetch from backend
+            if (!item && id && !id.match(/^[0-9a-fA-F]{24}$/)) {
+                try {
+                    const response = await fetch(`${API_BASE}/media/slug/${id}`);
+                    if (response.ok) {
+                        item = await response.json();
+                    }
+                } catch (error) {
+                    console.error('Error fetching media by slug:', error);
+                }
+            }
+            
+            setMediaItem(item);
+            
+            // Find related items
+            if (item) {
+                const related = mediaItems
+                    .filter(m => 
+                        m.slug !== item.slug &&
+                        m._id !== item._id && 
+                        m.id !== item.id && 
+                        m.status === 'published' &&
+                        (m.category === item.category || m.type === item.type)
+                    )
+                    .slice(0, 4);
+                setRelatedItems(related);
+                
+                // Track view
+                trackView(item._id || item.id);
+            }
+        };
+        
+        fetchMediaItem();
     }, [id, mediaItems]);
 
     const trackView = async (mediaId) => {
@@ -327,7 +348,7 @@ const MediaDetailPage = () => {
                                     {relatedItems.map((item) => (
                                         <Link
                                             key={item._id || item.id}
-                                            to={`/media/${item._id || item.id}`}
+                                            to={`/media/${item.slug || item._id || item.id}`}  // ✅ Updated to use slug
                                             className="flex gap-3 group"
                                         >
                                             <img

@@ -64,7 +64,7 @@ const BeautifulMediaPage = () => {
 
     // Share function
     const handleShare = (item) => {
-        const url = `${window.location.origin}/media/${item.id || item._id}`;
+        const url = `${window.location.origin}/media/${item.slug || item.id || item._id}`;
         const text = `Check out: ${item.title}`;
         
         if (navigator.share) {
@@ -364,7 +364,7 @@ const BeautifulMediaPage = () => {
                                                 {(item.views || 0).toLocaleString()}
                                             </span>
                                             <Link
-                                                to={`/media/${item.id || item._id}`}
+                                                to={`/media/${item.slug || item._id || item.id}`}  // ✅ Updated to use slug
                                                 className="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md transition-colors"
                                             >
                                                 View
@@ -492,7 +492,7 @@ const BeautifulMediaPage = () => {
 
                                                 <div className="flex gap-2">
                                                     <Link
-                                                        to={`/media/${item.id || item._id}`}
+                                                        to={`/media/${item.slug || item.id || item._id}`}
                                                         className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-colors text-sm text-center"
                                                     >
                                                         {item.type === 'video' ? 'Watch' : item.type === 'document' ? 'Download' : 'View'}
@@ -539,7 +539,7 @@ const BeautifulMediaPage = () => {
                                                     {item.views?.toLocaleString() || '0'}
                                                 </span>
                                                 <Link
-                                                    to={`/media/${item.id || item._id}`}
+                                                    to={`/media/${item.slug || item.id || item._id}`}
                                                     className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm"
                                                 >
                                                     View

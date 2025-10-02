@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const Media = require('../models/Media'); // Add this import
+const mongoose = require('mongoose');
 
 // Add auth middleware directly here
 const auth = (req, res, next) => {
@@ -180,32 +181,42 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get media by slug
+router.get('/slug/:slug', async (req, res) => {
+  try {
+    const media = await Media.findOne({ slug: req.params.slug });
+    
+    if (!media) {
+      return res.status(404).json({ message: 'Media not found' });
+    }
+    
+    res.json(media);
+  } catch (error) {
+    console.error('Error fetching media by slug:', error);
+    res.status(500).json({ message: 'Error fetching media', error: error.message });
+  }
+});
+
 // Get single media item
 router.get('/:id', async (req, res) => {
   try {
-    const media = await Media.findById(req.params.id).populate('uploadedBy', 'name email');
-    
-    if (!media) {
-      return res.status(404).json({
-        success: false,
-        message: 'Media not found'
-      });
+    // Check if it's a valid MongoDB ID
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      const media = await Media.findById(req.params.id);
+      if (media) return res.json(media);
     }
     
-    // Increment views
-    media.views += 1;
-    await media.save();
+    // If not found by ID, try slug as fallback
+    const media = await Media.findOne({ slug: req.params.id });
     
-    res.json({
-      success: true,
-      data: media
-    });
+    if (!media) {
+      return res.status(404).json({ message: 'Media not found' });
+    }
+    
+    res.json(media);
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to fetch media',
-      error: error.message 
-    });
+    console.error('Error fetching media:', error);
+    res.status(500).json({ message: 'Error fetching media', error: error.message });
   }
 });
 
