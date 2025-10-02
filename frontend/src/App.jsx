@@ -159,6 +159,53 @@ const BeautifulContactPage = () => (
                 ))}
             </div>
 
+            {/* Map Section - Add this new section */}
+            <div className="mb-16">
+                <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+                    <div className="p-8">
+                        <h2 className="text-3xl font-bold text-gray-800 mb-4">Find Us on the Map</h2>
+                        <p className="text-gray-600 mb-6">
+                            Visit our modern office at the Katsina Local Government Secretariat
+                        </p>
+                    </div>
+                    
+                    {/* Google Maps Embed */}
+                    <div className="relative w-full h-[500px] bg-gray-100">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.9039897043!2d7.5985!3d12.9816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x11050c7f1c4c8c6f%3A0x1234567890abcdef!2sKatsina%20Local%20Government%20Secretariat!5e0!3m2!1sen!2sng!4v1234567890"
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen=""
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="absolute inset-0"
+                            title="Katsina LG Secretariat Location"
+                        ></iframe>
+                        
+                        {/* Optional: Overlay with address info */}
+                        <div className="absolute bottom-6 left-6 bg-white rounded-xl shadow-lg p-4 max-w-sm">
+                            <h3 className="font-bold text-gray-800 mb-2">Katsina LG Secretariat</h3>
+                            <p className="text-sm text-gray-600 mb-2">
+                                Kofar Bai Road, Katsina<br />
+                                Katsina State, Nigeria
+                            </p>
+                            <a 
+                                href="https://www.google.com/maps/dir/?api=1&destination=Katsina+Local+Government+Secretariat+Katsina+Nigeria"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 text-sm text-green-600 hover:text-green-700 font-medium"
+                            >
+                                Get Directions
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             {/* Contact Form */}
             <div className="grid lg:grid-cols-2 gap-12">
                 <div className="bg-gradient-to-br from-green-600 to-blue-600 rounded-3xl p-8 text-white">
@@ -231,7 +278,7 @@ const BeautifulContactPage = () => (
                 </div>
             </div>
         </div>
-        {process.env.NODE_ENV === 'development' && <DataDebugComponent />}
+        {/* {process.env.NODE_ENV === 'development' && <DataDebugComponent />} */}
     </div>
 );
 

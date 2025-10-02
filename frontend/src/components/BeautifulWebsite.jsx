@@ -229,9 +229,9 @@ const BeautifulWebsite = ({ children }) => {
                                         label: "Facebook", 
                                         url: "https://web.facebook.com/people/Katsina-Local-Govt-Council/61575420623618/" 
                                     },
-                                    { icon: <Twitter className="w-5 h-5" />, label: "Twitter", url: "https://x.com/KatsinaStateNg" },
-                                    { icon: <Instagram className="w-5 h-5" />, label: "Instagram", url: "https://www.instagram.com/katsinastategovernment/" },
-                                    { icon: <Youtube className="w-5 h-5" />, label: "YouTube", url: "https://www.youtube.com/channel/UCL0kYT_vCG2fFuXZj_Jvv2Q" }
+                                    { icon: <Twitter className="w-5 h-5" />, label: "Twitter", url: "https://x.com/katsinaLGC/" },
+                                    { icon: <Instagram className="w-5 h-5" />, label: "Instagram", url: "https://www.instagram.com/katsinalocalgovtcouncil/" },
+                                    { icon: <Youtube className="w-5 h-5" />, label: "YouTube", url: "https://www.youtube.com/@KatsinaLocalGovtCouncil" }
                                     ].map((social, index) => (
                                     <a
                                         key={index}

@@ -8,10 +8,12 @@ import {
 } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+
 const MediaDetailPage = () => {
     const { id } = useParams(); // This could be slug or ID
     const navigate = useNavigate();
-    const { mediaItems, loading } = useData();
+    const { mediaItems, loading, refresh } = useData();
     const [mediaItem, setMediaItem] = useState(null);
     const [relatedItems, setRelatedItems] = useState([]);
     const [imageZoom, setImageZoom] = useState(false);
@@ -21,51 +23,87 @@ const MediaDetailPage = () => {
 
     useEffect(() => {
         const fetchMediaItem = async () => {
-            // First try to find in local state
+            // First try to find in local state by slug, _id, or id
             let item = mediaItems.find(m => 
                 (m.slug === id || m._id === id || m.id === id) && 
                 m.status === 'published'
             );
             
-            // If not found locally and we have a slug-like ID, fetch from backend
-            if (!item && id && !id.match(/^[0-9a-fA-F]{24}$/)) {
+            // If not found locally, fetch from backend
+            if (!item) {
                 try {
-                    const response = await fetch(`${API_BASE}/media/slug/${id}`);
+                    // Try fetching by slug first
+                    let response = await fetch(`${API_BASE}/media/slug/${id}`);
+                    
+                    // If slug fetch fails, try by ID
+                    if (!response.ok && id.match(/^[0-9a-fA-F]{24}$/)) {
+                        response = await fetch(`${API_BASE}/media/${id}`);
+                    }
+                    
                     if (response.ok) {
-                        item = await response.json();
+                        const data = await response.json();
+                        item = data.data || data; // Handle wrapped response
                     }
                 } catch (error) {
-                    console.error('Error fetching media by slug:', error);
+                    console.error('Error fetching media:', error);
                 }
             }
             
             setMediaItem(item);
             
-            // Find related items
-            if (item) {
+            // Find related items after we have the main item
+            if (item && mediaItems.length > 0) {
+                console.log('Finding related items for:', item.title);
+                console.log('Current item category:', item.category);
+                console.log('Current item type:', item.title);
+                console.log('Total media items available:', mediaItems.length);
+                
                 const related = mediaItems
-                    .filter(m => 
-                        m.slug !== item.slug &&
-                        m._id !== item._id && 
-                        m.id !== item.id && 
-                        m.status === 'published' &&
-                        (m.category === item.category || m.type === item.type)
-                    )
-                    .slice(0, 4);
+                    .filter(m => {
+                        // Skip if it's the same item (check all possible ID matches)
+                        if (m.slug === item.slug || 
+                            m._id === item._id) {
+                            return false;
+                        }
+                        
+                        // Only published items
+                        if (m.status !== 'published') {
+                            return false;
+                        }
+                        
+                        // Match by category OR type
+                        const sameCategory = m.category === item.category;
+                        const sameType = m.type === item.type;
+                        
+                        return sameCategory || sameType;
+                    })
+                    .slice(0, 5); // Limit to 5 items
+                
+                console.log('Related items found:', related.length);
+                console.log('Related items:', related.map(r => r.title));
                 setRelatedItems(related);
                 
                 // Track view
-                trackView(item._id || item.id);
+                if (item._id || item.id) {
+                    trackView(item._id || item.id);
+                }
             }
         };
         
         fetchMediaItem();
-    }, [id, mediaItems]);
+        
+        // Refresh media items if we don't have any
+        if (mediaItems.length === 0 && !loading) {
+            refresh();
+        }
+    }, [id, mediaItems, loading, refresh]);
 
     const trackView = async (mediaId) => {
         try {
             // Implement view tracking API call here
             console.log('Tracking view for:', mediaId);
+            // You can uncomment this when you have the endpoint ready
+            // await fetch(`${API_BASE}/media/${mediaId}/view`, { method: 'POST' });
         } catch (error) {
             console.error('Error tracking view:', error);
         }
@@ -171,7 +209,7 @@ const MediaDetailPage = () => {
         return years === 1 ? '1 year ago' : `${years} years ago`;
     };
 
-    if (loading) {
+    if (loading && !mediaItem) {
         return (
             <div className="min-h-screen bg-gray-50 pt-20">
                 <div className="max-w-7xl mx-auto px-4 py-12">
@@ -368,20 +406,23 @@ const MediaDetailPage = () => {
                     {/* Sidebar */}
                     <div className="lg:col-span-1">
                         {/* Related Media */}
-                        {relatedItems.length > 0 && (
+                        {relatedItems.length > 0 ? (
                             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
                                 <h3 className="text-lg font-bold text-gray-800 mb-4">Related Media</h3>
                                 <div className="space-y-4">
                                     {relatedItems.map((item) => (
                                         <Link
                                             key={item._id || item.id}
-                                            to={`/media/${item.slug || item._id || item.id}`}  // ✅ Updated to use slug
+                                            to={`/media/${item.slug || item._id || item.id}`}
                                             className="flex gap-3 group"
                                         >
                                             <img
                                                 src={item.thumbnail || item.fileUrl || '/default-media-image.jpg'}
                                                 alt={item.title}
                                                 className="w-20 h-20 object-cover rounded-lg group-hover:opacity-75 transition-opacity"
+                                                onError={(e) => {
+                                                    e.target.src = '/default-media-image.jpg';
+                                                }}
                                             />
                                             <div className="flex-1">
                                                 <h4 className="font-medium text-gray-800 group-hover:text-green-600 transition-colors line-clamp-2">
@@ -395,13 +436,16 @@ const MediaDetailPage = () => {
                                     ))}
                                 </div>
                             </div>
-                        )}
-                        
-                        {/* If no related items, show empty state */}
-                        {relatedItems.length === 0 && (
+                        ) : (
                             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
                                 <h3 className="text-lg font-bold text-gray-800 mb-4">Related Media</h3>
                                 <p className="text-gray-600 text-sm">No related media found.</p>
+                                <Link 
+                                    to="/media" 
+                                    className="mt-4 inline-block text-green-600 hover:text-green-700 font-medium text-sm"
+                                >
+                                    Browse all media →
+                                </Link>
                             </div>
                         )}
                     </div>
