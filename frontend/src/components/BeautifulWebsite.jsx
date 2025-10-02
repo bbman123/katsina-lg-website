@@ -10,24 +10,34 @@ const BeautifulWebsite = ({ children }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
-   // Scroll effect for header
-   useEffect(() => {
-       const handleScroll = () => setIsScrolled(window.scrollY > 50);
-       window.addEventListener('scroll', handleScroll);
-       return () => window.removeEventListener('scroll', handleScroll);
-   }, []);
+    // Scroll effect for header
+    useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-   // Updated navigation items (removed opportunities and services)
-   const navItems = [
-       { id: '/', label: 'Home', icon: <Home className="w-4 h-4" /> },
-       { id: '/media', label: 'Media', icon: <FileText className="w-4 h-4" /> },
-       { id: '/about', label: 'About', icon: <Users className="w-4 h-4" /> },
-       { id: '/contact', label: 'Contact', icon: <Phone className="w-4 h-4" /> }
-   ];
+    // Helper function to check if a nav item is active
+    const isNavActive = (navPath) => {
+        // For Media, check if we're on /media or any /media/* path
+        if (navPath === '/media') {
+            return location.pathname === navPath || location.pathname.startsWith('/media/');
+        }
+        // For other paths, exact match
+        return location.pathname === navPath;
+    };
 
-   return (
-       <div className="min-h-screen bg-gray-50 font-sans">
-           <style jsx>{`
+    // Updated navigation items
+    const navItems = [
+        { id: '/', label: 'Home', icon: <Home className="w-4 h-4" /> },
+        { id: '/media', label: 'Media', icon: <FileText className="w-4 h-4" /> },
+        { id: '/about', label: 'About', icon: <Users className="w-4 h-4" /> },
+        { id: '/contact', label: 'Contact', icon: <Phone className="w-4 h-4" /> }
+    ];
+
+    return (
+        <div className="min-h-screen bg-gray-50 font-sans">
+            <style jsx>{`
                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
                
                * {
@@ -96,7 +106,7 @@ const BeautifulWebsite = ({ children }) => {
                                    key={item.id}
                                    to={item.id}
                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
-                                       location.pathname === item.id
+                                       isNavActive(item.id)
                                            ? 'bg-green-600 text-white shadow-lg'
                                            : isScrolled
                                                ? 'text-gray-700 hover:text-green-600 hover:bg-green-50'
@@ -139,7 +149,7 @@ const BeautifulWebsite = ({ children }) => {
                                    to={item.id}
                                    onClick={() => setIsMenuOpen(false)}
                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                                       location.pathname === item.id
+                                       isNavActive(item.id)
                                            ? 'bg-green-600 text-white'
                                            : 'text-gray-700 hover:bg-green-50'
                                    }`}

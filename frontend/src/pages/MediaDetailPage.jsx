@@ -82,7 +82,34 @@ const MediaDetailPage = () => {
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = mediaItem.title + '.' + (mediaItem.type === 'document' ? 'pdf' : mediaItem.type === 'video' ? 'mp4' : 'jpg');
+            
+            // ✅ Use slug for filename, fallback to title if slug doesn't exist
+            const baseFilename = mediaItem.slug || 
+                mediaItem.title.toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .substring(0, 100);
+            
+            // Determine file extension based on type or existing file extension
+            let extension = '';
+            if (mediaItem.type === 'document') {
+                // Try to get extension from fileUrl if it's a document
+                const urlExtMatch = mediaItem.fileUrl.match(/\.([a-zA-Z0-9]+)(?:[?#]|$)/);
+                extension = urlExtMatch ? urlExtMatch[1] : 'pdf';
+            } else if (mediaItem.type === 'video') {
+                const urlExtMatch = mediaItem.fileUrl.match(/\.([a-zA-Z0-9]+)(?:[?#]|$)/);
+                extension = urlExtMatch ? urlExtMatch[1] : 'mp4';
+            } else if (mediaItem.type === 'image') {
+                const urlExtMatch = mediaItem.fileUrl.match(/\.([a-zA-Z0-9]+)(?:[?#]|$)/);
+                extension = urlExtMatch ? urlExtMatch[1] : 'jpg';
+            } else {
+                // Try to extract extension from fileUrl as last resort
+                const urlExtMatch = mediaItem.fileUrl.match(/\.([a-zA-Z0-9]+)(?:[?#]|$)/);
+                extension = urlExtMatch ? urlExtMatch[1] : 'file';
+            }
+            
+            a.download = `${baseFilename}.${extension}`;
+            
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
