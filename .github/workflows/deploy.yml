@@ -25,7 +25,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd ${{ secrets.SSH_TARGET }}
+          cd /${{ secrets.SSH_TARGET }}
           if [ ! -d ".git" ]; then
             git clone https://github.com/bbman123/katsina-lg-website.git .
           else
