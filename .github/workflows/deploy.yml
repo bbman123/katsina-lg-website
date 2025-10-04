@@ -1,0 +1,41 @@
+name: 🚀 Deploy to VPS
+
+on:
+  push:
+    branches: [ "develop" ]  # or "master"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd ${{ secrets.SSH_TARGET }}
+          if [ ! -d ".git" ]; then
+            git clone https://github.com/bbman123/katsina-lg-website.git .
+          else
+            git pull origin develop
+          fi
+          
+          cd backend
+          npm install --production
+          pm2 restart all || pm2 start npm --name "katsina-lg-backend" -- start
+          
+          cd ../frontend
+          npm install
+          npm run build
+          sudo cp -r dist/* /${{ secrets.SSH_TARGET }}/public_html/
