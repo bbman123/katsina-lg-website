@@ -385,7 +385,31 @@ const MediaDetailPage = () => {
 
                             {mediaItem.description && (
                                 <div className="prose max-w-none">
-                                    <p className="text-gray-700 leading-relaxed">{mediaItem.description}</p>
+                                    {/* Check if description contains line breaks or is an array */}
+                                    {Array.isArray(mediaItem.description) ? (
+                                        // If description is an array of paragraphs
+                                        <div className="space-y-3">
+                                            {mediaItem.description.map((paragraph, index) => (
+                                                <p key={index} className="text-gray-700 leading-relaxed text-justify">
+                                                    {paragraph}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    ) : mediaItem.description.includes('\n') ? (
+                                        // If description contains line breaks, split into paragraphs
+                                        <div className="space-y-3">
+                                            {mediaItem.description.split('\n').filter(p => p.trim()).map((paragraph, index) => (
+                                                <p key={index} className="text-gray-700 leading-relaxed text-justify">
+                                                    {paragraph.trim()}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        // Single paragraph description
+                                        <p className="text-gray-700 leading-relaxed text-justify">
+                                            {mediaItem.description}
+                                        </p>
+                                    )}
                                 </div>
                             )}
 

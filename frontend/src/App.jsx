@@ -249,7 +249,7 @@ const BeautifulContactPage = () => (
                         icon: "📍",
                         title: "Visit Us",
                         desc: "Modern Citizen Service Center",
-                        contact: "Katsina LG Secretariat, Katsina State",
+                        contact: "Katsina LG Secretariat, Nagogo Road Katsina, Katsina State",
                         color: "from-purple-500 to-violet-500"
                     }
                 ].map((contact, index) => (
@@ -292,7 +292,7 @@ const BeautifulContactPage = () => (
                         <div className="absolute bottom-6 left-6 bg-white rounded-xl shadow-lg p-4 max-w-sm">
                             <h3 className="font-bold text-gray-800 mb-2">Katsina LG Secretariat</h3>
                             <p className="text-sm text-gray-600 mb-2">
-                                Kofar Bai Road, Katsina<br />
+                                Nagogo Road, Katsina<br />
                                 Katsina State, Nigeria
                             </p>
                             <a 
