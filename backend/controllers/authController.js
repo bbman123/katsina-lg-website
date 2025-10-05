@@ -131,27 +131,32 @@ const login = async (req, res) => {
 // @access  Private
 const getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        // req.userId is set by auth middleware
+        const user = await User.findById(req.userId).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
 
         res.json({
             success: true,
             data: {
                 user: {
                     id: user._id,
-                    name: user.name,
                     email: user.email,
-                    role: user.role,
-                    lastLogin: user.lastLogin,
-                    createdAt: user.createdAt
+                    name: user.name,
+                    role: user.role
                 }
             }
         });
     } catch (error) {
-        console.error('Get me error:', error);
+        console.error('GetMe error:', error);
         res.status(500).json({
             success: false,
-            message: 'Server error',
-            error: error.message
+            message: 'Server error'
         });
     }
 };

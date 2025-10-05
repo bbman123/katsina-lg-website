@@ -38,22 +38,43 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+  const API_KEY = import.meta.env.VITE_API_KEY;
+
   const login = async (credentials) => {
+    setLoading(true);
     try {
-      const response = await authAPI.login(credentials);
-      if (response.data.success) {
-        const { user, token } = response.data.data;
+      const response = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': API_KEY
+        },
+        body: JSON.stringify(credentials)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const { user, token } = data.data;
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         setToken(token);
         setUser(user);
         return { success: true };
+      } else {
+        const errorData = await response.json();
+        return {
+          success: false,
+          error: errorData.message || 'Login failed'
+        };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Login failed' 
+      return {
+        success: false,
+        error: error.message || 'An error occurred'
       };
+    } finally {
+      setLoading(false);
     }
   };
 

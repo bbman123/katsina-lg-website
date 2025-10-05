@@ -17,6 +17,17 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Copy .htaccess into dist (just in case)
+      run: |
+        # This ensures .htaccess is in the repository for deployment
+        if [ -f "frontend/public/.htaccess" ]; then
+          mkdir -p frontend/dist
+          cp frontend/public/.htaccess frontend/dist/.htaccess
+          echo "✅ .htaccess copied to dist"
+        else
+          echo "⚠️ No .htaccess found in frontend/public/"
+        fi
+
     - name: Deploy via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -39,4 +50,12 @@ jobs:
           cd ../frontend
           npm install
           npm run build
-          sudo cp -r dist/* /${{ secrets.SSH_TARGET }}/public_html/
+          
+          # Copy .htaccess if it exists in public folder
+          if [ -f "public/.htaccess" ]; then
+            cp public/.htaccess dist/.htaccess
+            echo "✅ .htaccess copied to dist folder"
+          fi
+          
+          # Copy everything including .htaccess to public_html
+          sudo cp -r dist/* dist/.htaccess* /${{ secrets.SSH_TARGET }}/public_html/ 2>/dev/null || sudo cp -r dist/* /${{ secrets.SSH_TARGET }}/public_html/
