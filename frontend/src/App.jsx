@@ -141,18 +141,18 @@ const BeautifulAboutPage = () => (
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {[
-                        { name: "Hon. Abdullahi Musa", position: "Ward 1 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Fatima Ibrahim", position: "Ward 2 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Usman Garba", position: "Ward 3 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Aisha Yusuf", position: "Ward 4 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Muhammad Sani", position: "Ward 5 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Zainab Ahmed", position: "Ward 6 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Ibrahim Lawal", position: "Ward 7 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Hadiza Kabir", position: "Ward 8 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Yakubu Aliyu", position: "Ward 9 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Maryam Bashir", position: "Ward 10 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Salisu Abdullahi", position: "Ward 11 Councilor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Hafsat Umar", position: "Ward 12 Councilor", image: "/default-avatar.jpg" }
+                        { name: "Hon. Ishaq Tasiu Modoji ", position: "Shinkafi B (House Leader)", image: "/default-avatar.jpg" },
+                        { name: "Hon. Abdullahi Abubakar Yaradua", position: "Kangiwa", image: "/default-avatar.jpg" },
+                        { name: "Hon. Kamaladden Mamman Unguwar Yari", position: "Wakilin Arewa A", image: "/default-avatar.jpg" },
+                        { name: "Hon. Ibrahim Bello ", position: "Wakilin Arewa B", image: "/default-avatar.jpg" },
+                        { name: "Hon. Zaharaddini Sirajo ", position: "Wakilin Gabas I", image: "/default-avatar.jpg" },
+                        { name: "Hon. Yusuf Ibrahim", position: "Wakilin Gabas II", image: "/default-avatar.jpg" },
+                        { name: "Hon. Abubakar Musa Sani Ɗankwari", position: "Wakilin Kudu I", image: "/default-avatar.jpg" },
+                        { name: "Hon. Nura Adamu", position: "Wakilin Kudu II", image: "/default-avatar.jpg" },
+                        { name: "Hon. Abdullahi Yusuf", position: "Wakilin Kudu III", image: "/default-avatar.jpg" },
+                        { name: "Hon. Salahuddeen Nura", position: "Wakilin Yamma I", image: "/default-avatar.jpg" },
+                        { name: "Hon. Kabir Hussaini JJ masanawa ", position: "Wakilin Yamma II", image: "/default-avatar.jpg" },
+                        { name: "Hon. Imrana Saidu Shinkafi ", position: "Shinkafi A", image: "/default-avatar.jpg" },
                     ].map((councilor, index) => (
                         <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                             <div className="p-4 text-center">
@@ -183,17 +183,15 @@ const BeautifulAboutPage = () => (
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {[
-                        { name: "Hon. Ahmad Bello", position: "Education Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Bilkisu Abubakar", position: "Health Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Nasir Mohammed", position: "Agriculture Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Hauwa Idris", position: "Women Affairs Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Kabir Hassan", position: "Works Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Safiya Usman", position: "Environment Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Aminu Yahaya", position: "Finance Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Rakiya Suleiman", position: "Social Services Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Bala Abdullahi", position: "Youth & Sports Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Jamila Yusuf", position: "Commerce Supervisor", image: "/default-avatar.jpg" },
-                        { name: "Hon. Isa Mahmud", position: "Information Supervisor", image: "/default-avatar.jpg" }
+                        { name: "Hon. Saifullahi Mamman Agawa", position: "Administration", image: "/default-avatar.jpg" },
+                        { name: "Hon. Kabir Lawal K/Durbi", position: "Agriculture", image: "/default-avatar.jpg" },
+                        { name: "Hon. Misbahu Ahmad Maizare", position: "ESD", image: "/default-avatar.jpg" },
+                        { name: "Bara’atu Abdulaziz", position: "Finance", image: "/default-avatar.jpg" },
+                        { name: "Hon. Kabir Nura Abubakar", position: "Health", image: "/default-avatar.jpg" },
+                        { name: "Hon. Yusuf Ibrahim Danamar", position: "Special Duties", image: "/default-avatar.jpg" },
+                        { name: "Hon. Abubakar Jafar", position: "Works", image: "/default-avatar.jpg" },
+                        { name: "Hon. Ismail Tukur", position: "Special Adviser (Youth)", image: "/default-avatar.jpg" },
+                        { name: "Munawwara Abubakar", position: "Special Adviser (Women)", image: "/default-avatar.jpg" },
                     ].map((supervisor, index) => (
                         <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                             <div className="p-4 text-center">
