@@ -4,18 +4,24 @@ const validateApiKey = (req, res, next) => {
     const validApiKey = process.env.API_KEY;
     
     // List of endpoints that don't require API key
-    // Use req.path for the path check
     const publicPaths = [
-        '/health',        // Health check
-        '/test',          // Test endpoint
-        '/auth/login',    // Login endpoint
+        '/health',
+        '/test',
+        '/auth/login',
+        '/auth/me'        // ADD THIS - allow auth/me with just Bearer token
     ];
     
-    // Check if current path is public (remove /api prefix for comparison)
-    const pathWithoutApi = req.path.replace(/^\/api/, '');
+    // Check if current path is public
     const isPublicPath = publicPaths.some(path => 
-        pathWithoutApi === path || pathWithoutApi.startsWith(path + '/')
+        req.path === path || 
+        req.path.startsWith(path + '/') ||
+        req.originalUrl.includes(path)
     );
+    
+    // If it's a protected auth route and has Bearer token, allow it
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        return next();
+    }
     
     if (isPublicPath) {
         return next();
