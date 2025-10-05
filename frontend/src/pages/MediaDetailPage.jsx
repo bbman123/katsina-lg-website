@@ -9,6 +9,7 @@ import {
 import { useData } from '../contexts/DataContext';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+const API_KEY = import.meta.env.VITE_API_KEY; // ADD THIS
 
 const MediaDetailPage = () => {
     const { id } = useParams(); // This could be slug or ID
@@ -33,7 +34,11 @@ const MediaDetailPage = () => {
             if (!item) {
                 try {
                     // Try fetching by slug first
-                    let response = await fetch(`${API_BASE}/media/slug/${id}`);
+                    let response = await fetch(`${API_BASE}/media/slug/${id}`, {
+                        headers: {
+                            'X-API-Key': API_KEY  // ADD THIS
+                        }
+                    });
                     
                     // If slug fetch fails, try by ID
                     if (!response.ok && id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -105,7 +110,8 @@ const MediaDetailPage = () => {
             const response = await fetch(`${API_BASE}/media/${mediaId}/view`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-API-Key': API_KEY  // ADD THIS
                 }
             });
             

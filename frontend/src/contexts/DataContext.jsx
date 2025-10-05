@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+const API_KEY = import.meta.env.VITE_API_KEY; // ADD THIS LINE
+
 const DataContext = createContext();
 
 export const useData = () => {
@@ -9,9 +12,6 @@ export const useData = () => {
   }
   return context;
 };
-
-// 👇 Replace with your actual backend URL
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
 
 export const DataProvider = ({ children }) => {
   const [mediaItems, setMediaItems] = useState([]); // Already correct, just ensure it's an empty array
@@ -28,6 +28,7 @@ export const DataProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     return {
       'Content-Type': 'application/json',
+      'X-API-Key': API_KEY,  // ADD THIS
       ...(token && { 'Authorization': `Bearer ${token}` })
     };
   };

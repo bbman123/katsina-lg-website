@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/database');
 const setupCronJobs = require('./utils/cronJobs');
+const validateApiKey = require('./middleware/apiKey'); // ADD THIS LINE
 require('dotenv').config();
 
 // Define PORT at the beginning
@@ -39,6 +40,9 @@ app.use(cors({
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// ADD API KEY VALIDATION HERE (before routes but after body parser)
+app.use('/api', validateApiKey);
 
 // Test route
 app.get('/api/test', (req, res) => {
